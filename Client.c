@@ -6,6 +6,7 @@ int main(int argc, char *argv[])
     int socket;
     struct sockaddr_in servaddr;
 
+
     int i = 0;
     char scelta[2], reparto[2], kbuffer[2], data_scelta[11], conferma[4], nome[15], cognome[15], cod_ricetta[10], cod_prenotazione[5];
     LISTA_TIPOLOGIA_VISITE lista_tipologia_visite[100];
@@ -49,7 +50,7 @@ int main(int argc, char *argv[])
     bzero(cognome, 15);
     bzero(cod_ricetta, 10);
     
-
+    printf("Messaggio di prova\n");
     printf("*********Menu***********\n");
     printf("1.Prenota visita\n");
     printf("2.Informazione visita prenotata\n");
