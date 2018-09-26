@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
     char data_diponibili[100][20];
     char charflag[2];
 
-   
+
 
     //*************comunicazione con il server centrale ****************************
 
@@ -50,7 +50,7 @@ int main(int argc, char *argv[])
     bzero(cognome, 15);
     bzero(cod_ricetta, 10);
     
-    printf("Messaggio di prova\n");
+    printf("Messaggio di prova 2\n");
     printf("*********Menu***********\n");
     printf("1.Prenota visita\n");
     printf("2.Informazione visita prenotata\n");
