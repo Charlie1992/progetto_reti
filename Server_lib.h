@@ -22,6 +22,17 @@ typedef struct prenotazione{
     char    data_visita[10];
 }PRENOTAZIONE;
 
+// struttura per memorizzare i dati delle prenotazioni
+typedef struct dati{
+    char    cod_ricetta[10];
+    char    nome[15];
+    char    cognome[15];
+    char    data_visita[10];
+}DATI;
+
+
+
+
 // struttura dati memorizzare le possibili visite 
 typedef struct lista_tipologia_visite{
     int id_tv;
