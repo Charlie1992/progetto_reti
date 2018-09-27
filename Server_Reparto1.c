@@ -116,8 +116,7 @@ int main(int argc, char *argv[])
                 FullWrite(list_fd, kbuffer, sizeof(kbuffer));
                 FullWrite(list_fd, data_diponibili, sizeof(data_diponibili));
 
-                do
-                {
+//                do{
                     FullRead(list_fd, data_scelta, sizeof(data_scelta));
                     printf("Data scelta %s\n", data_scelta);
 
@@ -133,7 +132,7 @@ int main(int argc, char *argv[])
                     printf("Conferma %s\n", conferma);
                     //invio conferma al server centrale
                     FullWrite(list_fd, conferma, sizeof(conferma));
-                } while (strcmp(conferma, "si") != 0);
+        //        } while (strcmp(conferma, "si") != 0);
 
                 FullRead(list_fd, cod_prenotazione, sizeof(cod_prenotazione));
                 printf("Il codice prenotazione e' R1%s\n", cod_prenotazione);
@@ -194,16 +193,10 @@ int main(int argc, char *argv[])
                     printf("\nconferma :%s\n", conferma);
 
                     FullWrite(list_fd, conferma, sizeof(conferma));
-                    printf("%s\n",prenotazione[atoi(cod_prenotazione)].nome);
-                    printf("%s\n",prenotazione[atoi(cod_prenotazione)].cognome);
-                    printf("%s\n",prenotazione[atoi(cod_prenotazione)].data_visita);
-                    printf("%s\n",prenotazione[atoi(cod_prenotazione)].cod_ricetta);
-
                     strcpy(recuperoDati[1].nome,prenotazione[atoi(cod_prenotazione)].nome);
                     strcpy(recuperoDati[1].cognome,prenotazione[atoi(cod_prenotazione)].cognome);
                     strcpy(recuperoDati[1].data_visita,prenotazione[atoi(cod_prenotazione)].data_visita);
                     strcpy(recuperoDati[1].cod_ricetta,prenotazione[atoi(cod_prenotazione)].cod_ricetta);
-                    printf("OOOOOOOOOOOOOOOOOOOO\n");
                     printf("%s\n",recuperoDati[1].cod_ricetta);
                     printf("%s\n",recuperoDati[1].nome);
                     printf("%s\n",recuperoDati[1].cognome);
@@ -211,11 +204,7 @@ int main(int argc, char *argv[])
                     printf("Invio datirecuparti al server CUP\n");
                     //invio dati 
                     FullWrite(list_fd,recuperoDati,sizeof(recuperoDati));
-
-
-
-
-                    exit(1);
+                    exit(0);
             }
             else
             {

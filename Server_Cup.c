@@ -181,8 +181,7 @@ int main(int argc, char *argv[])
             else if (strcmp(scelta, "2") == 0)
             {
                 printf("\n Avvio procedura di recupero informazioni della visita prenotata\n");
-                do
-                {
+              // do{
                     bzero(cod_prenotazione,4);
                     bzero(cod_pret,8);
                     bzero(conferma,4);
@@ -196,6 +195,7 @@ int main(int argc, char *argv[])
                         printf("flag :%s\n", charflag);
                         FullWrite(conn_fd, charflag, sizeof(charflag));
                     } while (flag != 1);
+
                     for (i = 0; i < strlen(cod_prenotazione); i++)
                     {
                         if (i < 2)
@@ -225,13 +225,13 @@ int main(int argc, char *argv[])
                         strcpy(conferma, "no");
                         FullWrite(conn_fd,conferma,sizeof(conferma));
                     }
-                } while (strcmp(conferma,"si") != 0);
+             //  } while (strcmp(conferma,"si") != 0);
                 printf("\nesco dal while finale");
 
                 //lettura dei dati inviati dal server Reaprto
                 FullRead(conn_fd_server1,recuperoDati,sizeof(recuperoDati));
 
-                printf("OOOOOOOOOOOOOOOOOOOOO\n");
+                    printf("OOOOOOOOOOOOOOOOOOOOO\n");
                    printf("%s\n",recuperoDati[1].cod_ricetta);
                     printf("%s\n",recuperoDati[1].nome);
                     printf("%s\n",recuperoDati[1].cognome);

@@ -133,10 +133,8 @@ int main(int argc, char *argv[])
 
         //invio scelta la server CUP
         FullWrite(socket, scelta, sizeof(scelta));
-        do
-        {
-            do
-            {
+        //do{
+           do{
                 printf("Inserisci il codice della prenotazione :");
                 scanf("%s", cod_prenotazione);
                 FullWrite(socket, cod_prenotazione, sizeof(cod_prenotazione));
@@ -144,7 +142,9 @@ int main(int argc, char *argv[])
             } while (strcmp(charflag, "0") == 0);
             FullRead(socket,conferma,sizeof(conferma));
             printf("\nconferma :%s\n",conferma);
-        } while (strcmp(conferma, "si") != 0);
+        //} while (strcmp(conferma, "si") != 0);
+       
+       if(strcmp(conferma, "si") == 0){
         FullRead(socket,recuperoDati,sizeof(recuperoDati));
         printf("\n i dati sono \n ");
         printf("\n codice ricetta :%s",recuperoDati[1].cod_ricetta);
@@ -152,6 +152,10 @@ int main(int argc, char *argv[])
         printf("\n codice cognome :%s",recuperoDati[1].cognome);
         printf("\n codice data :%s",recuperoDati[1].data_visita);
         printf("\n FINE!!");
+        }else{
+        printf("NOn ci sta la prenotazone \n");
+	exit(-1);
+	}    
     }
     else
     {
