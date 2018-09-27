@@ -25,7 +25,6 @@ int main(int argc, char *argv[])
     LISTA_TIPOLOGIA_VISITE lista_tipologia_visite[100];
     char data_diponibili[100][20];
     PRENOTAZIONE prenotazione[100];
-    PRENOTAZIONE recuperoDati[2];
 
     FILE *file;
 
@@ -227,19 +226,6 @@ int main(int argc, char *argv[])
                     }
                 } while (strcmp(conferma,"si") != 0);
                 printf("\nesco dal while finale");
-
-                //lettura dei dati inviati dal server Reaprto
-                FullRead(conn_fd_server1,recuperoDati,sizeof(recuperoDati));
-
-                printf("OOOOOOOOOOOOOOOOOOOOO\n");
-                   printf("%s\n",recuperoDati[1].cod_ricetta);
-                    printf("%s\n",recuperoDati[1].nome);
-                    printf("%s\n",recuperoDati[1].cognome);
-                    printf("%s\n",recuperoDati[1].data_visita);
-                printf("Invio dati recuperati al client\n");
-                
-                //invio dati recuparti al cliente
-                FullWrite(conn_fd,recuperoDati,sizeof(recuperoDati));
             }
             else
             {

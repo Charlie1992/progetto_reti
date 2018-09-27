@@ -16,10 +16,8 @@ int main(int argc, char *argv[])
 
     char data_diponibili[100][20];
     char lista_date[100][20], data_scelta[11];
-
     PRENOTAZIONE prenotazione[100];
-    PRENOTAZIONE recuperoDati[2];
-    //DATI recuperoDati[2];
+
     riempi_lista_data(lista_date);
 
     //*************comunicazione con il server centrale******************
@@ -191,30 +189,11 @@ int main(int argc, char *argv[])
                         strcpy(conferma, "si");
                     }
                    
-                    printf("\nconferma :%s\n", conferma);
+                    printf("\nconferma :%s", conferma);
 
                     FullWrite(list_fd, conferma, sizeof(conferma));
-                    printf("%s\n",prenotazione[atoi(cod_prenotazione)].nome);
-                    printf("%s\n",prenotazione[atoi(cod_prenotazione)].cognome);
-                    printf("%s\n",prenotazione[atoi(cod_prenotazione)].data_visita);
-                    printf("%s\n",prenotazione[atoi(cod_prenotazione)].cod_ricetta);
-
-                    strcpy(recuperoDati[1].nome,prenotazione[atoi(cod_prenotazione)].nome);
-                    strcpy(recuperoDati[1].cognome,prenotazione[atoi(cod_prenotazione)].cognome);
-                    strcpy(recuperoDati[1].data_visita,prenotazione[atoi(cod_prenotazione)].data_visita);
-                    strcpy(recuperoDati[1].cod_ricetta,prenotazione[atoi(cod_prenotazione)].cod_ricetta);
-                    printf("OOOOOOOOOOOOOOOOOOOO\n");
-                    printf("%s\n",recuperoDati[1].cod_ricetta);
-                    printf("%s\n",recuperoDati[1].nome);
-                    printf("%s\n",recuperoDati[1].cognome);
-                    printf("%s\n",recuperoDati[1].data_visita);
-                    printf("Invio datirecuparti al server CUP\n");
-                    //invio dati 
-                    FullWrite(list_fd,recuperoDati,sizeof(recuperoDati));
-
-
-
-
+                    printf("\nho mandato la fullwrite della conferma %s\n", conferma);
+                    printf("Finex\n");
                     exit(1);
             }
             else
