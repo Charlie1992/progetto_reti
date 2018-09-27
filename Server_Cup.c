@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     char scelta[2], reparto[2], kbuffer[2],
         data_scelta[11], conferma[4], nome[15],
         cognome[15], cod_ricetta[10],
-        numprenotazioni[2], cod_prenotazione[5];
+        numprenotazioni[2], cod_prenotazione[4];
 
     char cod_prenotazioneReparto[5];
     int flag = 0;
@@ -81,13 +81,12 @@ int main(int argc, char *argv[])
             //clear dei buffer
             bzero(scelta, 2);
             bzero(reparto, 2);
-            bzero(conferma, 4);
             bzero(data_scelta, 11);
             bzero(nome, 15);
             bzero(cognome, 15);
             bzero(cod_ricetta, 10);
             bzero(numprenotazioni, 2);
-            bzero(cod_prenotazione, 5);
+            bzero(cod_prenotazione, 4);
             bzero(cod_reparto, 3);
             bzero(cod_pret, 8);
 
@@ -183,26 +182,50 @@ int main(int argc, char *argv[])
                 printf("\n Avvio procedura di recupero informazioni della visita prenotata\n");
                 do
                 {
-                    FullRead(conn_fd, cod_prenotazione, sizeof(cod_prenotazione));
-                    printf("\ncodice prenotazione :%s",cod_prenotazione);
-                    flag = controllo(cod_prenotazione);
-                    sprintf(charflag, "%d", flag);
-                    printf("flag :%s\n", charflag);
-                    FullWrite(conn_fd, charflag, sizeof(charflag));
-                } while (flag != 1);
-                for (i = 0; i < strlen(cod_prenotazione); i++)
-                {
-                    if (i < 2)
+                    bzero(cod_prenotazione,4);
+                    bzero(cod_pret,8);
+                    bzero(conferma,4);
+                    
+                    do
                     {
-                        cod_reparto[i] = cod_prenotazione[i];
-                    }
-                    else
+                        FullRead(conn_fd, cod_prenotazione, sizeof(cod_prenotazione));
+                        printf("\ncodice prenotazione :%s", cod_prenotazione);
+                        flag = controllo(cod_prenotazione);
+                        sprintf(charflag, "%d", flag);
+                        printf("flag :%s\n", charflag);
+                        FullWrite(conn_fd, charflag, sizeof(charflag));
+                    } while (flag != 1);
+                    for (i = 0; i < strlen(cod_prenotazione); i++)
                     {
-                        cod_pret[i - 2] = cod_prenotazione[i];
+                        if (i < 2)
+                        {
+                            cod_reparto[i] = cod_prenotazione[i];
+                        }
+                        else
+                        {
+                            cod_pret[i - 2] = cod_prenotazione[i];
+                        }
                     }
-                }
-                printf("\ncod_reparto :%s\n", cod_reparto);
-                printf("\ncod_pret :%s\n", cod_pret);
+                    printf("\ncod_reparto :%s\n", cod_reparto);
+                    printf("\ncod_pret :%s\n", cod_pret);
+
+
+                    if (strcmp(cod_reparto, "R1") == 0)
+                    {
+                        printf("\nentro nella dase di conferma dopo R1 \n");
+                        FullWrite(conn_fd_server1, scelta, sizeof(scelta));
+                        FullWrite(conn_fd_server1, cod_pret, sizeof(cod_pret));                      
+                        bzero(conferma, 4);
+                        FullRead(conn_fd_server1, conferma, sizeof(conferma));
+                        printf("\nconferma:%s",conferma);
+                        FullWrite(conn_fd,conferma,sizeof(conferma));
+                    }else{
+                        printf("\nReparto closato\n");
+                        strcpy(conferma, "no");
+                        FullWrite(conn_fd,conferma,sizeof(conferma));
+                    }
+                } while (strcmp(conferma,"si") != 0);
+                printf("\nesco dal while finale");
             }
             else
             {

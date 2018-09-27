@@ -6,14 +6,11 @@ int main(int argc, char *argv[])
     int socket;
     struct sockaddr_in servaddr;
 
-
     int i = 0;
-    char scelta[2], reparto[2], kbuffer[2], data_scelta[11], conferma[4], nome[15], cognome[15], cod_ricetta[10], cod_prenotazione[5];
+    char scelta[2], reparto[2], kbuffer[2], data_scelta[11], conferma[4], nome[15], cognome[15], cod_ricetta[10], cod_prenotazione[4];
     LISTA_TIPOLOGIA_VISITE lista_tipologia_visite[100];
     char data_diponibili[100][20];
     char charflag[2];
-
-
 
     //*************comunicazione con il server centrale ****************************
 
@@ -49,8 +46,7 @@ int main(int argc, char *argv[])
     bzero(nome, 15);
     bzero(cognome, 15);
     bzero(cod_ricetta, 10);
-    
-  
+
     printf("*********Menu**********\n");
     printf("1.Prenota visita\n");
     printf("2.Informazione visita prenotata\n");
@@ -116,7 +112,7 @@ int main(int argc, char *argv[])
             FullWrite(socket, cognome, sizeof(cognome));
             FullWrite(socket, cod_ricetta, sizeof(cod_ricetta));
 
-            bzero(cod_prenotazione, 5);
+            bzero(cod_prenotazione, 4);
             FullRead(socket, cod_prenotazione, sizeof(cod_prenotazione));
             printf("Il codice delle prenotazione e' %s\n", cod_prenotazione);
             exit(1);
@@ -137,11 +133,16 @@ int main(int argc, char *argv[])
         FullWrite(socket, scelta, sizeof(scelta));
         do
         {
-            printf("Inserisci il codice della prenotazione :");
-            scanf("%s", cod_prenotazione);
-            FullWrite(socket, cod_prenotazione, sizeof(cod_prenotazione));
-            FullRead(socket, charflag, sizeof(charflag));
-        } while (strcmp(charflag, "0") == 0);
+            do
+            {
+                printf("Inserisci il codice della prenotazione :");
+                scanf("%s", cod_prenotazione);
+                FullWrite(socket, cod_prenotazione, sizeof(cod_prenotazione));
+                FullRead(socket, charflag, sizeof(charflag));
+            } while (strcmp(charflag, "0") == 0);
+            FullRead(socket,conferma,sizeof(conferma));
+            printf("\nconferma :%s\n",conferma);
+        } while (strcmp(conferma, "si") != 0);
     }
     else
     {
