@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     char lista_date[100][20], data_scelta[11];
 
     PRENOTAZIONE prenotazione[100];
-    PRENOTAZIONE recuperoDati[2];
+    PRENOTAZIONE recuperoDati[100];
     //DATI recuperoDati[2];
     riempi_lista_data(lista_date);
 

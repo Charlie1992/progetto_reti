@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
     LISTA_TIPOLOGIA_VISITE lista_tipologia_visite[100];
     char data_diponibili[100][20];
     PRENOTAZIONE prenotazione[100];
-    PRENOTAZIONE recuperoDati[2];
+    PRENOTAZIONE recuperoDati[100];
 
     FILE *file;
 
