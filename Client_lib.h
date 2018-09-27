@@ -10,27 +10,19 @@
 #define localhost "127.0.0.1"
 #define client_cup_port 1024
 
-// struttura per memorizzare i dati delle prenotazioni
-
-typedef struct prenotazione{
-
-    char    cod_ricetta[10];
-
-    char    nome[15];
-
-    char    cognome[15];
-
-    char    data_visita[10];
-
-}PRENOTAZIONE;
-
-
 // struttura dati memorizzare le possibili visite 
 typedef struct lista_tipologia_visite{
     int id_tv;
     char nome_tv[50];
 }LISTA_TIPOLOGIA_VISITE;
 
+// struttura per memorizzare i dati delle prenotazioni
+typedef struct prenotazione{
+    char    cod_ricetta[10];
+    char    nome[15];
+    char    cognome[15];
+    char    data_visita[10];
+}PRENOTAZIONE;
 
 //funzione per contare il numero totale delle tipologie delle visite disponibili
 int conta_ltv(LISTA_TIPOLOGIA_VISITE lista_tipologia_visite[]){

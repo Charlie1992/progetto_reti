@@ -11,6 +11,8 @@ int main(int argc, char *argv[])
     LISTA_TIPOLOGIA_VISITE lista_tipologia_visite[100];
     char data_diponibili[100][20];
     char charflag[2];
+    
+    PRENOTAZIONE recuperoDati[100];
 
     //*************comunicazione con il server centrale ****************************
 
@@ -143,6 +145,13 @@ int main(int argc, char *argv[])
             FullRead(socket,conferma,sizeof(conferma));
             printf("\nconferma :%s\n",conferma);
         } while (strcmp(conferma, "si") != 0);
+        FullRead(socket,recuperoDati,sizeof(recuperoDati));
+        printf("\n i dati sono \n ");
+        printf("\n codice ricetta :%s",recuperoDati[1].cod_ricetta);
+        printf("\n codice nome :%s",recuperoDati[1].nome);
+        printf("\n codice cognome :%s",recuperoDati[1].cognome);
+        printf("\n codice data :%s",recuperoDati[1].data_visita);
+        printf("\n FINE!!");
     }
     else
     {
