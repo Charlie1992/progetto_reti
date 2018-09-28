@@ -2,7 +2,6 @@
 
 int main(int argc, char *argv[])
 {
-    char recvline[1024], sendline[1024];
     int socket;
     struct sockaddr_in servaddr;
 
@@ -133,7 +132,6 @@ int main(int argc, char *argv[])
 
         //invio scelta la server CUP
         FullWrite(socket, scelta, sizeof(scelta));
-        //do{
            do{
                 printf("Inserisci il codice della prenotazione :");
                 scanf("%s", cod_prenotazione);
@@ -142,7 +140,6 @@ int main(int argc, char *argv[])
             } while (strcmp(charflag, "0") == 0);
             FullRead(socket,conferma,sizeof(conferma));
             printf("\nconferma :%s\n",conferma);
-        //} while (strcmp(conferma, "si") != 0);
        
        if(strcmp(conferma, "si") == 0){
         FullRead(socket,recuperoDati,sizeof(recuperoDati));
@@ -156,6 +153,21 @@ int main(int argc, char *argv[])
         printf("NOn ci sta la prenotazone \n");
 	exit(-1);
 	}    
+    }
+    else if (strcmp(scelta, "3") == 0)
+    {
+        printf("\navvio procedura di cancellazione visita\n");
+        FullWrite(socket, scelta, sizeof(scelta));
+        do{
+            printf("inserisci il codice della prenotazione da eliminare:");
+            scanf("%s", cod_prenotazione);
+            FullWrite(socket, cod_prenotazione, sizeof(cod_prenotazione));
+            FullRead(socket, charflag, sizeof(charflag));
+        } while (strcmp(charflag, "0") == 0);
+        FullRead(socket,conferma,sizeof(conferma));
+        printf("\nconferma :%s\n",conferma);
+        
+        
     }
     else
     {
