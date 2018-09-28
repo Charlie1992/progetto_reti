@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
                 FullWrite(list_fd, kbuffer, sizeof(kbuffer));
                 FullWrite(list_fd, data_diponibili, sizeof(data_diponibili));
 
-//                do{
+               do{
                     FullRead(list_fd, data_scelta, sizeof(data_scelta));
                     printf("Data scelta %s\n", data_scelta);
 
@@ -132,7 +132,7 @@ int main(int argc, char *argv[])
                     printf("Conferma %s\n", conferma);
                     //invio conferma al server centrale
                     FullWrite(list_fd, conferma, sizeof(conferma));
-        //        } while (strcmp(conferma, "si") != 0);
+                } while (strcmp(conferma, "si") != 0);
 
                 FullRead(list_fd, cod_prenotazione, sizeof(cod_prenotazione));
                 printf("Il codice prenotazione e' R1%s\n", cod_prenotazione);
