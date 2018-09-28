@@ -181,65 +181,111 @@ int main(int argc, char *argv[])
             else if (strcmp(scelta, "2") == 0)
             {
                 printf("\n Avvio procedura di recupero informazioni della visita prenotata\n");
-              // do{
-                    bzero(cod_prenotazione,4);
-                    bzero(cod_pret,8);
-                    bzero(conferma,4);
-                    
-                    do
-                    {
-                        FullRead(conn_fd, cod_prenotazione, sizeof(cod_prenotazione));
-                        printf("\ncodice prenotazione :%s", cod_prenotazione);
-                        flag = controllo(cod_prenotazione);
-                        sprintf(charflag, "%d", flag);
-                        printf("flag :%s\n", charflag);
-                        FullWrite(conn_fd, charflag, sizeof(charflag));
-                    } while (flag != 1);
+                bzero(cod_prenotazione, 4);
+                bzero(cod_pret, 8);
+                bzero(conferma, 4);
 
-                    for (i = 0; i < strlen(cod_prenotazione); i++)
+                do
+                {
+                    FullRead(conn_fd, cod_prenotazione, sizeof(cod_prenotazione));
+                    printf("\ncodice prenotazione :%s", cod_prenotazione);
+                    flag = controllo(cod_prenotazione);
+                    sprintf(charflag, "%d", flag);
+                    printf("flag :%s\n", charflag);
+                    FullWrite(conn_fd, charflag, sizeof(charflag));
+                } while (flag != 1);
+
+                for (i = 0; i < strlen(cod_prenotazione); i++)
+                {
+                    if (i < 2)
                     {
-                        if (i < 2)
-                        {
-                            cod_reparto[i] = cod_prenotazione[i];
-                        }
-                        else
-                        {
-                            cod_pret[i - 2] = cod_prenotazione[i];
-                        }
+                        cod_reparto[i] = cod_prenotazione[i];
                     }
-                    printf("\ncod_reparto :%s\n", cod_reparto);
-                    printf("\ncod_pret :%s\n", cod_pret);
-
-
-                    if (strcmp(cod_reparto, "R1") == 0)
+                    else
                     {
-                        printf("\nentro nella dase di conferma dopo R1 \n");
-                        FullWrite(conn_fd_server1, scelta, sizeof(scelta));
-                        FullWrite(conn_fd_server1, cod_pret, sizeof(cod_pret));                      
-                        bzero(conferma, 4);
-                        FullRead(conn_fd_server1, conferma, sizeof(conferma));
-                        printf("\nconferma:%s",conferma);
-                        FullWrite(conn_fd,conferma,sizeof(conferma));
-                    }else{
-                        printf("\nReparto closato\n");
-                        strcpy(conferma, "no");
-                        FullWrite(conn_fd,conferma,sizeof(conferma));
+                        cod_pret[i - 2] = cod_prenotazione[i];
                     }
-             //  } while (strcmp(conferma,"si") != 0);
-                printf("\nesco dal while finale");
+                }
+                printf("\ncod_reparto :%s\n", cod_reparto);
+                printf("\ncod_pret :%s\n", cod_pret);
+
+                if (strcmp(cod_reparto, "R1") == 0)
+                {
+                    printf("\nentro nella dase di conferma dopo R1 \n");
+                    FullWrite(conn_fd_server1, scelta, sizeof(scelta));
+                    FullWrite(conn_fd_server1, cod_pret, sizeof(cod_pret));
+                    bzero(conferma, 4);
+                    FullRead(conn_fd_server1, conferma, sizeof(conferma));
+                    printf("\nconferma:%s", conferma);
+                    FullWrite(conn_fd, conferma, sizeof(conferma));
+                }
+                else
+                {
+                    printf("\nReparto closato\n");
+                    strcpy(conferma, "no");
+                    FullWrite(conn_fd, conferma, sizeof(conferma));
+                }
 
                 //lettura dei dati inviati dal server Reaprto
-                FullRead(conn_fd_server1,recuperoDati,sizeof(recuperoDati));
-
-                    printf("OOOOOOOOOOOOOOOOOOOOO\n");
-                   printf("%s\n",recuperoDati[1].cod_ricetta);
-                    printf("%s\n",recuperoDati[1].nome);
-                    printf("%s\n",recuperoDati[1].cognome);
-                    printf("%s\n",recuperoDati[1].data_visita);
+                FullRead(conn_fd_server1, recuperoDati, sizeof(recuperoDati));
+                printf("OOOOOOOOOOOOOOOOOOOOO\n");
+                printf("%s\n", recuperoDati[1].cod_ricetta);
+                printf("%s\n", recuperoDati[1].nome);
+                printf("%s\n", recuperoDati[1].cognome);
+                printf("%s\n", recuperoDati[1].data_visita);
                 printf("Invio dati recuperati al client\n");
-                
+ 
                 //invio dati recuparti al cliente
-                FullWrite(conn_fd,recuperoDati,sizeof(recuperoDati));
+                FullWrite(conn_fd, recuperoDati, sizeof(recuperoDati));
+            }
+            else if (strcmp(scelta, "3") == 0)
+            {
+
+                printf("\n Avvio procedura di recupero informazioni della visita prenotata\n");
+                bzero(cod_prenotazione, 4);
+                bzero(cod_pret, 8);
+                bzero(conferma, 4);
+
+                do
+                {
+                    FullRead(conn_fd, cod_prenotazione, sizeof(cod_prenotazione));
+                    printf("\ncodice prenotazione :%s", cod_prenotazione);
+                    flag = controllo(cod_prenotazione);
+                    sprintf(charflag, "%d", flag);
+                    printf("flag :%s\n", charflag);
+                    FullWrite(conn_fd, charflag, sizeof(charflag));
+                } while (flag != 1);
+
+                for (i = 0; i < strlen(cod_prenotazione); i++)
+                {
+                    if (i < 2)
+                    {
+                        cod_reparto[i] = cod_prenotazione[i];
+                    }
+                    else
+                    {
+                        cod_pret[i - 2] = cod_prenotazione[i];
+                    }
+                }
+                printf("\ncod_reparto :%s\n", cod_reparto);
+                printf("\ncod_pret :%s\n", cod_pret);
+
+                  if (strcmp(cod_reparto, "R1") == 0)
+                {
+                    FullWrite(conn_fd_server1, scelta, sizeof(scelta));
+                    FullWrite(conn_fd_server1, cod_pret, sizeof(cod_pret));
+                    FullRead(conn_fd_server1, conferma, sizeof(conferma));
+                    printf("\nconferma:%s", conferma);
+                    FullWrite(conn_fd, conferma, sizeof(conferma));
+                }
+                else
+                {
+                    printf("\nReparto closato\n");
+                    strcpy(conferma, "no");
+                    FullWrite(conn_fd, conferma, sizeof(conferma));
+                }
+                FullWrite(conn_fd, conferma, sizeof(conferma));
+
             }
             else
             {

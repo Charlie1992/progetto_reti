@@ -116,7 +116,8 @@ int main(int argc, char *argv[])
                 FullWrite(list_fd, kbuffer, sizeof(kbuffer));
                 FullWrite(list_fd, data_diponibili, sizeof(data_diponibili));
 
-               do{
+                do
+                {
                     FullRead(list_fd, data_scelta, sizeof(data_scelta));
                     printf("Data scelta %s\n", data_scelta);
 
@@ -169,49 +170,99 @@ int main(int argc, char *argv[])
                 file = fopen("reparto1.txt", "r+");
                 //letturera numero prenotazioni esistenti
                 fscanf(file, "%s", numprenotazioni);
-                
-                    //lettura dai prenotazione esistenti
-                    for (i = 1; i <= atoi(numprenotazioni); i++)
-                    {
-                        fscanf(file, "%s %s %s %s\n", prenotazione[i].nome, prenotazione[i].cognome, prenotazione[i].data_visita, prenotazione[i].cod_ricetta);
-                    }
-                    fclose(file);
 
-                    //lettura codice prenotazione
-                    bzero(cod_prenotazione, 4);
-                    FullRead(list_fd, cod_prenotazione, sizeof(cod_prenotazione));
-                    printf("\n il codice prenotazione e' R1%s\n", cod_prenotazione);
+                //lettura dai prenotazione esistenti
+                for (i = 1; i <= atoi(numprenotazioni); i++)
+                {
+                    fscanf(file, "%s %s %s %s\n", prenotazione[i].nome, prenotazione[i].cognome, prenotazione[i].data_visita, prenotazione[i].cod_ricetta);
+                }
+                fclose(file);
 
-                    printf("Codice %d \n", atoi(prenotazione[atoi(cod_prenotazione)].cod_ricetta));
-                     strcpy(conferma, "no");
-                    if (atoi(prenotazione[atoi(cod_prenotazione)].cod_ricetta) != 0)                   
-                    {
-                        bzero(conferma, 4);
-                        strcpy(conferma, "si");
-                    }
-                   
-                    printf("\nconferma :%s\n", conferma);
+                //lettura codice prenotazione
+                bzero(cod_prenotazione, 4);
+                FullRead(list_fd, cod_prenotazione, sizeof(cod_prenotazione));
+                printf("\n il codice prenotazione e' R1%s\n", cod_prenotazione);
 
-                    FullWrite(list_fd, conferma, sizeof(conferma));
-                    strcpy(recuperoDati[1].nome,prenotazione[atoi(cod_prenotazione)].nome);
-                    strcpy(recuperoDati[1].cognome,prenotazione[atoi(cod_prenotazione)].cognome);
-                    strcpy(recuperoDati[1].data_visita,prenotazione[atoi(cod_prenotazione)].data_visita);
-                    strcpy(recuperoDati[1].cod_ricetta,prenotazione[atoi(cod_prenotazione)].cod_ricetta);
-                    printf("%s\n",recuperoDati[1].cod_ricetta);
-                    printf("%s\n",recuperoDati[1].nome);
-                    printf("%s\n",recuperoDati[1].cognome);
-                    printf("%s\n",recuperoDati[1].data_visita);
-                    printf("Invio datirecuparti al server CUP\n");
-                    //invio dati 
-                    FullWrite(list_fd,recuperoDati,sizeof(recuperoDati));
-                    exit(0);
+                printf("Codice %d \n", atoi(prenotazione[atoi(cod_prenotazione)].cod_ricetta));
+                strcpy(conferma, "no");
+                if (atoi(prenotazione[atoi(cod_prenotazione)].cod_ricetta) != 0)
+                {
+                    bzero(conferma, 4);
+                    strcpy(conferma, "si");
+                }
+
+                printf("\nconferma :%s\n", conferma);
+
+                FullWrite(list_fd, conferma, sizeof(conferma));
+                strcpy(recuperoDati[1].nome, prenotazione[atoi(cod_prenotazione)].nome);
+                strcpy(recuperoDati[1].cognome, prenotazione[atoi(cod_prenotazione)].cognome);
+                strcpy(recuperoDati[1].data_visita, prenotazione[atoi(cod_prenotazione)].data_visita);
+                strcpy(recuperoDati[1].cod_ricetta, prenotazione[atoi(cod_prenotazione)].cod_ricetta);
+                printf("%s\n", recuperoDati[1].cod_ricetta);
+                printf("%s\n", recuperoDati[1].nome);
+                printf("%s\n", recuperoDati[1].cognome);
+                printf("%s\n", recuperoDati[1].data_visita);
+                printf("Invio datirecuparti al server CUP\n");
+                //invio dati
+                FullWrite(list_fd, recuperoDati, sizeof(recuperoDati));
+                exit(0);
             }
             else
             {
                 wait(NULL);
             }
         }
-    }
+        else if (strcmp(scelta, "3") == 0)
+        {
+            //fork per gestire la connessione
+            if ((pid = fork()) < 0)
+            {
+                perror("fork error");
+                exit(-1);
+            }
+            if (pid == 0)
+            {
 
-    exit(0);
+                bzero(conferma, 4);
+
+                printf("\navvio procedura di recupero informazione visita prenotata\n");
+
+                //apertura del file del reparto
+                file = fopen("reparto1.txt", "r+");
+                //letturera numero prenotazioni esistenti
+                fscanf(file, "%s", numprenotazioni);
+
+                //lettura dai prenotazione esistenti
+                for (i = 1; i <= atoi(numprenotazioni); i++)
+                {
+                    fscanf(file, "%s %s %s %s\n", prenotazione[i].nome, prenotazione[i].cognome, prenotazione[i].data_visita, prenotazione[i].cod_ricetta);
+                }
+                fclose(file);
+
+                //lettura codice prenotazione
+                bzero(cod_prenotazione, 4);
+                FullRead(list_fd, cod_prenotazione, sizeof(cod_prenotazione));
+                printf("\n il codice prenotazione e' R1%s\n", cod_prenotazione);
+
+                printf("Codice %d \n", atoi(prenotazione[atoi(cod_prenotazione)].cod_ricetta));
+                strcpy(conferma, "no");
+                if (atoi(prenotazione[atoi(cod_prenotazione)].cod_ricetta) != 0)
+                {
+                    bzero(conferma, 4);
+                    strcpy(conferma, "si");
+                }
+
+                printf("\nconferma :%s\n", conferma);
+
+                FullWrite(list_fd, conferma, sizeof(conferma));
+                exit(1);
+            }
+            else
+            {
+                wait(NULL);
+            }
+        }
+
+        exit(0);
+    }
 }
