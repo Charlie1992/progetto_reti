@@ -82,12 +82,13 @@ int main(int argc, char *argv[])
             //leggo date e dim di date disponibili
             FullRead(socket, kbuffer, sizeof(kbuffer));
             FullRead(socket, data_diponibili, sizeof(data_diponibili));
-
+            printf("Numero di date disponibili %s\n",kbuffer);
             printf("Data disponibili:\n");
             for (i = 1; i <= atoi(kbuffer); i++)
             {
                 printf("%s \n", data_diponibili[i]);
             }
+
             do
             {
                 printf("Inserire data:");
@@ -143,12 +144,11 @@ int main(int argc, char *argv[])
        
        if(strcmp(conferma, "si") == 0){
         FullRead(socket,recuperoDati,sizeof(recuperoDati));
-        printf("\n i dati sono \n ");
-        printf("\n codice ricetta :%s",recuperoDati[1].cod_ricetta);
-        printf("\n codice nome :%s",recuperoDati[1].nome);
-        printf("\n codice cognome :%s",recuperoDati[1].cognome);
-        printf("\n codice data :%s",recuperoDati[1].data_visita);
-        printf("\n FINE!!");
+        printf("\ni dati sono");
+        printf("\nricetta :%s",recuperoDati[1].cod_ricetta);
+        printf("\nnome :%s",recuperoDati[1].nome);
+        printf("\ncognome :%s",recuperoDati[1].cognome);
+        printf("\ndata :%s\n",recuperoDati[1].data_visita);
         }else{
         printf("NOn ci sta la prenotazone \n");
 	exit(-1);
@@ -167,6 +167,11 @@ int main(int argc, char *argv[])
         FullRead(socket,conferma,sizeof(conferma));
         printf("\nconferma :%s\n",conferma);
         
+        if(strcmp(conferma,"si")==0){
+            printf("Cancellazione avvenuta con sucesso.\n");
+        }else{
+            printf("Prenotazione inesistente.\n");
+        }
         
     }
     else

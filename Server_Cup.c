@@ -167,7 +167,7 @@ int main(int argc, char *argv[])
                     fprintf(file, "\n%s\n", nome);
                     fprintf(file, "%s\n", cognome);
                     fprintf(file, "%s\n", data_scelta);
-                    fprintf(file, "%s", cod_ricetta);
+                    fprintf(file, "%s\n", cod_ricetta);
 
                     fclose(file);
 
@@ -229,10 +229,10 @@ int main(int argc, char *argv[])
                 //lettura dei dati inviati dal server Reaprto
                 FullRead(conn_fd_server1, recuperoDati, sizeof(recuperoDati));
                 printf("OOOOOOOOOOOOOOOOOOOOO\n");
-                printf("%s\n", recuperoDati[1].cod_ricetta);
-                printf("%s\n", recuperoDati[1].nome);
-                printf("%s\n", recuperoDati[1].cognome);
-                printf("%s\n", recuperoDati[1].data_visita);
+                printf("Codice ricetta %s\n", recuperoDati[1].cod_ricetta);
+                printf("Nome %s\n", recuperoDati[1].nome);
+                printf("Cognome %s\n", recuperoDati[1].cognome);
+                printf("data %s\n", recuperoDati[1].data_visita);
                 printf("Invio dati recuperati al client\n");
  
                 //invio dati recuparti al cliente

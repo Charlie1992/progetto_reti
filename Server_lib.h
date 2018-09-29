@@ -16,10 +16,10 @@ char    lista_date[100][20];
 
 // struttura per memorizzare i dati delle prenotazioni
 typedef struct prenotazione{
-    char    cod_ricetta[10];
+    char    cod_ricetta[15];
     char    nome[15];
     char    cognome[15];
-    char    data_visita[10];
+    char    data_visita[15];
 }PRENOTAZIONE;
 
 // struttura per memorizzare i dati delle prenotazioni

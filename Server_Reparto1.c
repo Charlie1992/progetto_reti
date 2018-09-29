@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     int len;
     pid_t pid;
 
-    FILE *file;
+    FILE *file,*file1;
     char scelta[2], numprenotazioni[2], kbuffer[2], conferma[4], cod_prenotazione[4];
     int i = 0, j = 0, count_datap = 0, k = 1;
 
@@ -237,32 +237,63 @@ int main(int argc, char *argv[])
                 {
                     fscanf(file, "%s %s %s %s\n", prenotazione[i].nome, prenotazione[i].cognome, prenotazione[i].data_visita, prenotazione[i].cod_ricetta);
                 }
+
                 fclose(file);
+                unlink("reparto1.txt");
 
                 //lettura codice prenotazione
                 bzero(cod_prenotazione, 4);
                 FullRead(list_fd, cod_prenotazione, sizeof(cod_prenotazione));
                 printf("\n il codice prenotazione e' R1%s\n", cod_prenotazione);
 
-                printf("Codice %d \n", atoi(prenotazione[atoi(cod_prenotazione)].cod_ricetta));
                 strcpy(conferma, "no");
                 if (atoi(prenotazione[atoi(cod_prenotazione)].cod_ricetta) != 0)
                 {
                     bzero(conferma, 4);
                     strcpy(conferma, "si");
-                }
 
+                    //cancellazione della prenotazione
+                    for (i = 1; i <=atoi(numprenotazioni); i++)
+                    {
+                        if (i == atoi(cod_prenotazione))
+                        { //salva su file
+                            strcpy(prenotazione[i].nome,"---");
+                            strcpy(prenotazione[i].cognome,"---");
+                            strcpy(prenotazione[i].data_visita,"---");
+                            strcpy(prenotazione[i].cod_ricetta,"---");
+                        }
+                    }
+
+                    file1 = fopen("reparto1.txt","w+");
+
+                    //mi posiziono all'inizio del file
+                    fseek(file1, 0, SEEK_SET);
+                    fprintf(file1, "%s\n\n", numprenotazioni);
+
+                    //salvataggio delle prenotazioni
+                    for (i = 1; i <= atoi(numprenotazioni); i++)
+                    {
+                        printf("codice prenotazione  %d\n\n", i);
+                        //salva su file
+                        fprintf(file1, "%s\n", prenotazione[i].nome);
+                        fprintf(file1, "%s\n", prenotazione[i].cognome);
+                        fprintf(file1, "%s\n", prenotazione[i].data_visita);
+                        fprintf(file1, "%s\n\n", prenotazione[i].cod_ricetta);
+                    }
+                    fclose(file1);
+                }
+                
                 printf("\nconferma :%s\n", conferma);
 
                 FullWrite(list_fd, conferma, sizeof(conferma));
-                exit(1);
+
+                //exit(1);
             }
             else
             {
                 wait(NULL);
             }
         }
-
-        exit(0);
     }
+            exit(0);
 }
