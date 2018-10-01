@@ -48,7 +48,7 @@ int main(int argc, char *argv[]){
     
     while (1){
         len = sizeof(client);
-        conn_fd = ACCEPT(list_fd, (struct sockaddr *)&client, &len);
+        conn_fd = ACCEPT(list_fd, (struct sockaddr *)&client,(socklen_t *) &len);
         
         // fork per gestire le connesione
         if ((pid = fork()) < 0){
