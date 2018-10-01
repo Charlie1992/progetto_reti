@@ -27,10 +27,10 @@ typedef struct prenotazione{
 //funzione per contare il numero totale delle tipologie delle visite disponibili
 int conta_ltv(LISTA_TIPOLOGIA_VISITE lista_tipologia_visite[]){
     int count = 1;
-    while(lista_tipologia_visite[count].id_tv!=0){
+    while(lista_tipologia_visite[count].id_tv!=-1){
         count++;
     }
-    return count++;
+    return count;
 }
 
 

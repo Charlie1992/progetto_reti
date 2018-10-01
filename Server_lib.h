@@ -40,8 +40,6 @@ typedef struct lista_tipologia_visite{
 }LISTA_TIPOLOGIA_VISITE;
 
 
-
-
 void ListaNomiVisite(LISTA_TIPOLOGIA_VISITE nome_visite[]){
         nome_visite[1].id_tv = 1 ; 
         strcpy(nome_visite[1].nome_tv,"Visita Cardiologica");
@@ -51,6 +49,8 @@ void ListaNomiVisite(LISTA_TIPOLOGIA_VISITE nome_visite[]){
         strcpy(nome_visite[3].nome_tv,"Visita Ginecologica");
         nome_visite[4].id_tv = 4;
         strcpy(nome_visite[4].nome_tv,"Visita Oculistica");
+    nome_visite[5].id_tv = -1;
+    strcpy(nome_visite[5].nome_tv,"-1");
 }
 
 void riempi_lista_data(char lista_date[][20]){
@@ -60,15 +60,16 @@ void riempi_lista_data(char lista_date[][20]){
     strcpy(lista_date[4],"10/09/2018");
     strcpy(lista_date[5],"01/09/2018");
     strcpy(lista_date[6],"03/09/2018");
+    strcpy(lista_date[7],"-1");
 }
 
 //conta date 
 int conta_date(char lista_data[][20]){
     int count = 1;
-    while(strcmp(lista_data[count],"")!=0){
+    while(strcmp(lista_data[count],"-1")!=0){
         count++;
     }
-    return count++;
+    return count;
 }
 
 //controllo codice prenotazione
