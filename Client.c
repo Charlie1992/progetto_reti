@@ -3,7 +3,7 @@
 int main(int argc, char *argv[]){
     int socket, i=0;
     struct sockaddr_in servaddr;
-    char scelta[2], reparto[2], kbuffer[2], data_scelta[11], conferma[4], nome[15], cognome[15], cod_ricetta[10], cod_prenotazione[4], data_diponibili[100][20], charflag[2];
+    char scelta[2], reparto[2], kbuffer[2], data_scelta[15], conferma[4], nome[15], cognome[15], cod_ricetta[15], cod_prenotazione[5], data_diponibili[100][20], charflag[2];
     LISTA_TIPOLOGIA_VISITE lista_tipologia_visite[100];
     PRENOTAZIONE recuperoDati[100];
     
@@ -34,10 +34,10 @@ int main(int argc, char *argv[]){
     bzero(scelta, 2);
     bzero(reparto, 2);
     bzero(kbuffer, 2);
-    bzero(data_scelta, 11);
+    bzero(data_scelta, 15);
     bzero(nome, 15);
     bzero(cognome, 15);
-    bzero(cod_ricetta, 10);
+    bzero(cod_ricetta, 15);
     
     printf("*********Menu**********\n");
     printf("1.Prenota visita\n");
@@ -100,7 +100,7 @@ int main(int argc, char *argv[]){
             FullWrite(socket, cognome, sizeof(cognome));
             FullWrite(socket, cod_ricetta, sizeof(cod_ricetta));
             
-            bzero(cod_prenotazione, 4);
+            bzero(cod_prenotazione, 5);
             FullRead(socket, cod_prenotazione, sizeof(cod_prenotazione));
             printf("Il codice delle prenotazione e' %s\n", cod_prenotazione);
             exit(1);

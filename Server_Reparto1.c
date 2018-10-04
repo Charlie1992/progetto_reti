@@ -6,7 +6,7 @@ int main(int argc, char *argv[]){
     pid_t pid;
     
     FILE *file,*file1;
-    char scelta[2], numprenotazioni[2], kbuffer[2], conferma[4], cod_prenotazione[4], data_diponibili[100][20],lista_date[100][20], data_scelta[11];
+    char scelta[2], numprenotazioni[2], kbuffer[2], conferma[4], cod_prenotazione[5], data_diponibili[100][20],lista_date[100][20], data_scelta[15];
     PRENOTAZIONE prenotazione[100], recuperoDati[2];
     //DATI recuperoDati[2];
     riempi_lista_data(lista_date);
@@ -34,10 +34,11 @@ int main(int argc, char *argv[]){
         INET_PTON(AF_INET, argv[1], &servaddr);
     }
     CONNECTION(list_fd, servaddr, sizeof(servaddr));
+
     while (1){
         bzero(scelta, 2);
         bzero(numprenotazioni, 2);
-        bzero(data_scelta, 11);
+        bzero(data_scelta, 15);
         
         //ricevo scelta del server cup
         FullRead(list_fd, scelta, sizeof(scelta));
@@ -110,8 +111,8 @@ int main(int argc, char *argv[]){
                 printf("Dati prenotazione: \n ");
                 printf("Nome: %s \n ", prenotazione[atoi(cod_prenotazione)].nome);
                 printf("Cognome: %s \n ", prenotazione[atoi(cod_prenotazione)].cognome);
+                printf("Codice Ricetta: %s \n ", prenotazione[atoi(cod_prenotazione)].cod_ricetta);
                 printf("Data: %s \n ", prenotazione[atoi(cod_prenotazione)].data_visita);
-                printf("Codice ricetta: %s \n ", prenotazione[atoi(cod_prenotazione)].cod_ricetta);
             }else{
                 wait(NULL);
             }
@@ -139,7 +140,7 @@ int main(int argc, char *argv[]){
                 fclose(file);
                 
                 //lettura codice prenotazione
-                bzero(cod_prenotazione, 4);
+                bzero(cod_prenotazione, 5);
                 FullRead(list_fd, cod_prenotazione, sizeof(cod_prenotazione));
                 printf("\n il codice prenotazione e' R1%s\n", cod_prenotazione);
                 
@@ -193,7 +194,7 @@ int main(int argc, char *argv[]){
                 unlink("reparto1.txt");
                 
                 //lettura codice prenotazione
-                bzero(cod_prenotazione, 4);
+                bzero(cod_prenotazione, 5);
                 FullRead(list_fd, cod_prenotazione, sizeof(cod_prenotazione));
                 printf("\n il codice prenotazione e' R1%s\n", cod_prenotazione);
                 

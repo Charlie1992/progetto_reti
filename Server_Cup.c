@@ -7,9 +7,9 @@ int main(int argc, char *argv[]){
     struct sockaddr_in servaddr, serv1addr, client;
     pid_t pid;
     char scelta[2], reparto[2], kbuffer[2],
-    data_scelta[11], conferma[4], nome[15],
-    cognome[15], cod_ricetta[10],
-    numprenotazioni[2], cod_prenotazione[4], cod_prenotazioneReparto[5], charflag[2], cod_reparto[3], cod_pret[8], data_diponibili[100][20];
+    data_scelta[15], conferma[4], nome[15],
+    cognome[15], cod_ricetta[15],
+    numprenotazioni[2], cod_prenotazione[5], cod_prenotazioneReparto[5], charflag[2], cod_reparto[3], cod_pret[5], data_diponibili[100][20];
     LISTA_TIPOLOGIA_VISITE lista_tipologia_visite[100];
     PRENOTAZIONE prenotazione[100], recuperoDati[2];
     
@@ -64,14 +64,14 @@ int main(int argc, char *argv[]){
             //clear dei buffer
             bzero(scelta, 2);
             bzero(reparto, 2);
-            bzero(data_scelta, 11);
+            bzero(data_scelta, 15);
             bzero(nome, 15);
             bzero(cognome, 15);
-            bzero(cod_ricetta, 10);
+            bzero(cod_ricetta, 15);
             bzero(numprenotazioni, 2);
-            bzero(cod_prenotazione, 4);
+            bzero(cod_prenotazione, 5);
             bzero(cod_reparto, 3);
-            bzero(cod_pret, 8);
+            bzero(cod_pret, 5);
             
             //lettura scelta dal client
             FullRead(conn_fd, scelta, sizeof(scelta));
@@ -157,8 +157,8 @@ int main(int argc, char *argv[]){
                 }
             }else if (strcmp(scelta, "2") == 0){
                 printf("\n Avvio procedura di recupero informazioni della visita prenotata\n");
-                bzero(cod_prenotazione, 4);
-                bzero(cod_pret, 8);
+                bzero(cod_prenotazione, 5);
+                bzero(cod_pret, 5);
                 bzero(conferma, 4);
                 
                 do{
@@ -208,8 +208,8 @@ int main(int argc, char *argv[]){
             }else if (strcmp(scelta, "3") == 0){
                 
                 printf("\n Avvio procedura di recupero informazioni della visita prenotata\n");
-                bzero(cod_prenotazione, 4);
-                bzero(cod_pret, 8);
+                bzero(cod_prenotazione, 5);
+                bzero(cod_pret, 5);
                 bzero(conferma, 4);
                 
                 do{
