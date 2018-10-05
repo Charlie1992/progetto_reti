@@ -9,6 +9,8 @@
 
 #define localhost "127.0.0.1"
 #define client_cup_port 1024
+#define medico1_reparto1_port 1026
+
 
 // struttura dati memorizzare le possibili visite 
 typedef struct lista_tipologia_visite{

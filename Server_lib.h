@@ -11,6 +11,7 @@
 #define localhost "127.0.0.1"
 #define client_cup_port 1024
 #define cup_server_reparto1_port 1025
+#define medico1_reparto1_port 1026
 
 char    lista_date[100][20];
 

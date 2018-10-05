@@ -2,12 +2,14 @@
 
 int main(int argc, char *argv[])
 {
-    int list_fd, conn_fd, i = 0, j = 0, count_datap = 0, k = 1, enable = 1;
-    struct sockaddr_in servaddr;
-    pid_t pid;
+    int list_fd, conn_fd,list_fd_medico,conn_fd_medico, i = 0, j = 0, count_datap = 0, k = 1, enable = 1;
+    struct sockaddr_in servaddr,servaddr_medico;
+    pid_t pid,pid1;
 
     FILE *file, *file1;
-    char scelta[2], numprenotazioni[2], kbuffer[2], conferma[4], cod_prenotazione[5], data_diponibili[100][20], lista_date[100][20], data_scelta[15];
+    char scelta[2], numprenotazioni[2], kbuffer[2], conferma[4],
+     cod_prenotazione[5], data_diponibili[100][20], 
+     lista_date[100][20], data_scelta[15],numTotDate[2];
     PRENOTAZIONE prenotazione[100], recuperoDati[2];
     //DATI recuperoDati[2];
     riempi_lista_data(lista_date);
@@ -41,7 +43,20 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
+    //*************comunicazione con il client medico******************
+    list_fd_medico = SOCKET(AF_INET, SOCK_STREAM, 0);
+    servaddr_medico.sin_family = AF_INET;
+    servaddr_medico.sin_addr.s_addr = htonl(INADDR_ANY);
+    servaddr_medico.sin_port = htons(medico1_reparto1_port);
+
+    //IMPOSTA SOCKETS IN MODO DA POTER RIUTILIZZARE L'INDIRIZZO IP
+    setsockopt(list_fd_medico, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int));
+    BIND(list_fd_medico, servaddr_medico);
+    LISTEN(list_fd_medico, 1024);
+
+
     pid = fork();
+    pid1 = fork();
 
     if (pid == 0)
     {
@@ -262,6 +277,56 @@ int main(int argc, char *argv[])
                 exit(0);
             }else{
                  close(conn_fd);
+            }
+        }
+    }
+    else
+    {
+        wait(NULL);
+    }
+
+     if (pid1 == 0)
+    {
+        while (1)
+        {
+            conn_fd_medico = ACCEPT(list_fd_medico, NULL, NULL);
+
+            // fork per gestire le connesione
+            if ((pid = fork()) < 0)
+            {
+                perror("fork error");
+                exit(-1);
+            }
+            // se sono il filgio
+            if (pid == 0)
+            {
+                close(list_fd_medico);
+                //apertura del file del reparto
+                file = fopen("reparto1.txt", "r+");
+                //letturera numero prenotazioni esistenti
+                fscanf(file, "%s", numprenotazioni);
+
+                //lettura dai prenotazione esistenti
+                for (i = 1; i <= atoi(numprenotazioni); i++)
+                {
+                    fscanf(file, "%s %s %s %s\n", prenotazione[i].nome, prenotazione[i].cognome, prenotazione[i].data_visita, prenotazione[i].cod_ricetta);
+                }
+                fclose(file);
+                //invio del numero delle prenotazioni
+                FullWrite(conn_fd_medico, numprenotazioni, sizeof(numprenotazioni));
+                //invio delle prenotazioni
+                FullWrite(conn_fd_medico, prenotazione, sizeof(prenotazione));
+                sprintf(numTotDate, "%d", conta_date(lista_date));
+                //Invio numero totali di date
+                FullWrite(conn_fd_medico, numTotDate, sizeof(numTotDate));
+                //invio della lista date totali
+                FullWrite(conn_fd_medico, lista_date, sizeof(lista_date));
+                close(conn_fd_medico);
+                exit(1);
+            }
+            else
+            {
+                close(conn_fd_medico);
             }
         }
     }
