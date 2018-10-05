@@ -45,7 +45,7 @@ int main(int argc, char *argv[]){
         count=0;
         
         printf("\nin data %s ci sono le seguenti prenotazioni \n",lista_date[i]);
-        for (j=1; j<atoi(numprenotazioni); j++) {
+        for (j=1; j<=atoi(numprenotazioni); j++) {
             if(strcmp(lista_date[i],prenotazione[j].data_visita)==0 && strcmp(prenotazione[j].data_visita, "---")!=0){
                 printf("\ncodice prenotazione: R1%d",j);
                 printf("\nnome :%s",prenotazione[j].nome);
