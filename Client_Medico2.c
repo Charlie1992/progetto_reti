@@ -50,7 +50,7 @@ int main(int argc, char *argv[]){
                 printf("\ncodice prenotazione: R1%d",j);
                 printf("\nnome :%s",prenotazione[j].nome);
                 printf("\ncognome :%s",prenotazione[j].cognome);
-                printf("\nvisita :%s \n",prenotazione[i].nome_visita_scelta);
+                printf("\nvisita :%s \n",prenotazione[j].nome_visita_scelta);
                 count++;
             }
         }
