@@ -154,6 +154,24 @@ int ACCEPT(int listenfd, struct sockaddr *client, socklen_t *serveraddr_length){
 }
 
 
+int ClientLink(struct sockaddr_in servaddr,int port,char *ip_address,int val){
+        int socket;
+
+        socket = SOCKET(AF_INET, SOCK_STREAM, 0);
+        servaddr.sin_family = AF_INET;
+        servaddr.sin_port = htons(port);
+        if(val==1){
+            INET_PTON(AF_INET,localhost,&servaddr);   
+        }else{
+            INET_PTON(AF_INET,ip_address,&servaddr);
+        }
+        CONNECTION(socket,servaddr,sizeof(servaddr));
+        
+        return socket;
+
+}
+
+
 ssize_t FullWrite(int fd, const void *buf, size_t count)  
 { 
     size_t nleft; 
