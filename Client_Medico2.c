@@ -7,8 +7,6 @@ int main(int argc, char *argv[]){
     char lista_date[100][11], numprenotazioni[2],numTotDate[4];
     PRENOTAZIONE prenotazione[100];
     
-    
-    
     //*************comunicazione con il server reparto ****************************
     
     // AF_INET : famiglia di ip che stiamo considerando (IP4v)
@@ -21,7 +19,7 @@ int main(int argc, char *argv[]){
     //salva la famiglia di ip che stiamo considerando
     servaddr.sin_family = AF_INET;
     // salva la potra in formato network order
-    servaddr.sin_port = htons(medico1_reparto1_port);
+    servaddr.sin_port = htons(medico2_reparto2_port);
     
     // controlla se in input non c'è il ip mi conetto con il locahost
     if (argc == 1){
@@ -40,8 +38,10 @@ int main(int argc, char *argv[]){
     FullRead(socket, numTotDate, sizeof(numTotDate));
     //lettura lista date
     FullRead(socket, lista_date, sizeof(lista_date));
-    
+ 
+    printf("-%d-\n",atoi(numTotDate));
     for(i=1;i<atoi(numTotDate);i++){
+        
         count=0;
         
         printf("\nin data %s ci sono le seguenti prenotazioni \n",lista_date[i]);
@@ -50,8 +50,7 @@ int main(int argc, char *argv[]){
                 printf("\ncodice prenotazione: R1%d",j);
                 printf("\nnome :%s",prenotazione[j].nome);
                 printf("\ncognome :%s",prenotazione[j].cognome);
-                printf("\nvisita :%s\n", prenotazione[j].nome_visita_scelta);
-                
+                printf("\nvisita :%s \n",prenotazione[i].nome_visita_scelta);
                 count++;
             }
         }

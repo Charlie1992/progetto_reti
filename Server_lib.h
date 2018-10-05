@@ -11,28 +11,20 @@
 #define localhost "127.0.0.1"
 #define client_cup_port 1024
 #define cup_server_reparto1_port 1025
-#define medico1_reparto1_port 1026
+#define cup_server_reparto2_port 1027
+#define medico1_reparto1_port 1030
+#define medico2_reparto2_port 1031
 
-char    lista_date[100][20];
+char    lista_date[200][11];
 
 // struttura per memorizzare i dati delle prenotazioni
 typedef struct prenotazione{
     char    cod_ricetta[15];
     char    nome[15];
     char    cognome[15];
-    char    data_visita[15];
+    char    data_visita[11];
+    char    nome_visita_scelta[30];
 }PRENOTAZIONE;
-
-// struttura per memorizzare i dati delle prenotazioni
-typedef struct dati{
-    char    cod_ricetta[10];
-    char    nome[15];
-    char    cognome[15];
-    char    data_visita[10];
-}DATI;
-
-
-
 
 // struttura dati memorizzare le possibili visite 
 typedef struct lista_tipologia_visite{
@@ -43,29 +35,62 @@ typedef struct lista_tipologia_visite{
 
 void ListaNomiVisite(LISTA_TIPOLOGIA_VISITE nome_visite[]){
         nome_visite[1].id_tv = 1 ; 
-        strcpy(nome_visite[1].nome_tv,"Visita Cardiologica");
+        strcpy(nome_visite[1].nome_tv,"Elettrocardiogramma");
         nome_visite[2].id_tv  = 2;
-        strcpy(nome_visite[2].nome_tv ,"Visita Gastroenterologica");
+        strcpy(nome_visite[2].nome_tv ,"Ecocardiogramma");
         nome_visite[3].id_tv = 3;
-        strcpy(nome_visite[3].nome_tv,"Visita Ginecologica");
+        strcpy(nome_visite[3].nome_tv,"Holter_ECG");
         nome_visite[4].id_tv = 4;
-        strcpy(nome_visite[4].nome_tv,"Visita Oculistica");
-    nome_visite[5].id_tv = -1;
-    strcpy(nome_visite[5].nome_tv,"-1");
+        strcpy(nome_visite[4].nome_tv,"Holter_Cardiaco");
+        nome_visite[5].id_tv = 5;
+        strcpy(nome_visite[5].nome_tv,"Esame_Del_Sangue");
+        nome_visite[6].id_tv = 6;
+        strcpy(nome_visite[6].nome_tv,"Vaccinazioni");
+        nome_visite[7].id_tv = 7;
+        strcpy(nome_visite[7].nome_tv,"Emocroma");
+        nome_visite[8].id_tv = 8;
+        strcpy(nome_visite[8].nome_tv,"Consulenza_Alimentare");
+        nome_visite[9].id_tv = -1;
+        strcpy(nome_visite[9].nome_tv,"-1");
 }
 
-void riempi_lista_data(char lista_date[][20]){
-    strcpy(lista_date[1],"10/01/2019");
-    strcpy(lista_date[2],"01/01/2018");
-    strcpy(lista_date[3],"10/08/2018");
-    strcpy(lista_date[4],"10/09/2018");
-    strcpy(lista_date[5],"01/09/2018");
-    strcpy(lista_date[6],"03/09/2018");
-    strcpy(lista_date[7],"-1");
+void riempi_lista_data(char lista_date[][11]){
+    strcpy(lista_date[1],"01/10/2018");
+    strcpy(lista_date[2],"02/10/2018");
+    strcpy(lista_date[3],"03/10/2018");
+    strcpy(lista_date[4],"04/10/2018");
+    strcpy(lista_date[5],"05/10/2018");
+    strcpy(lista_date[6],"06/10/2018");
+    strcpy(lista_date[7],"07/10/2018");
+    strcpy(lista_date[8],"08/10/2018");
+    strcpy(lista_date[9],"09/10/2018");
+    strcpy(lista_date[10],"10/10/2018");
+    strcpy(lista_date[11],"11/10/2018");
+    strcpy(lista_date[12],"12/10/2018");
+    strcpy(lista_date[13],"13/10/2018");
+    strcpy(lista_date[14],"14/10/2018");
+    strcpy(lista_date[15],"15/10/2018");
+    strcpy(lista_date[16],"16/10/2018");
+    strcpy(lista_date[17],"17/10/2018");
+    strcpy(lista_date[18],"18/10/2018");
+    strcpy(lista_date[19],"19/10/2018");
+    strcpy(lista_date[20],"20/10/2018");
+    strcpy(lista_date[21],"21/10/2018");
+    strcpy(lista_date[22],"22/10/2018");
+    strcpy(lista_date[23],"23/10/2018");
+    strcpy(lista_date[24],"24/10/2018");
+    strcpy(lista_date[25],"25/10/2018");
+    strcpy(lista_date[26],"26/10/2018");
+    strcpy(lista_date[27],"27/10/2018");
+    strcpy(lista_date[28],"28/10/2018");
+    strcpy(lista_date[29],"29/10/2018");
+    strcpy(lista_date[30],"30/10/2018");
+    strcpy(lista_date[31],"-1");
 }
+
 
 //conta date 
-int conta_date(char lista_data[][20]){
+int conta_date(char lista_data[][11]){
     int count = 1;
     while(strcmp(lista_data[count],"-1")!=0){
         count++;
@@ -82,12 +107,10 @@ int controllo(char codice[]){
 	for(i =1;i<4;i++){
 		buff='0'+i;
 		if(codice[0]=='R' && codice[1]==buff){
-			printf("Tronvato \n");
 			x=1;
 			return x;			
 		}
 	}
-	printf("NON CI STA");
 	return x;
 }
 

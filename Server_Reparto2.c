@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     servaddr.sin_addr.s_addr = htons(INADDR_ANY);
     // funione per memeorizzare la porta sulla quale il serve
     // ci risponde. Questo valore sara salvato nel campo sin_port
-    servaddr.sin_port = htons(cup_server_reparto1_port);
+    servaddr.sin_port = htons(cup_server_reparto2_port);
 
     //IMPOSTA SOCKETS IN MODO DA POTER RIUTILIZZARE L'INDIRIZZO IP
     setsockopt(list_fd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int));
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     list_fd_medico = SOCKET(AF_INET, SOCK_STREAM, 0);
     servaddr_medico.sin_family = AF_INET;
     servaddr_medico.sin_addr.s_addr = htonl(INADDR_ANY);
-    servaddr_medico.sin_port = htons(medico1_reparto1_port);
+    servaddr_medico.sin_port = htons(medico2_reparto2_port);
 
     //IMPOSTA SOCKETS IN MODO DA POTER RIUTILIZZARE L'INDIRIZZO IP
     setsockopt(list_fd_medico, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int));
@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
                     printf("avvio procedura di prenotazione visita\n");
 
                     //apertura del file del reparto
-                    file = fopen("reparto1.txt", "r+");
+                    file = fopen("reparto2.txt", "r+");
                     //letturera numero prenotazioni esistenti
                     fscanf(file, "%s", numprenotazioni);
 
@@ -102,22 +102,14 @@ int main(int argc, char *argv[])
                     }
                     fclose(file);
 
-                    for(i = 1; i <= atoi(numprenotazioni);i++){
-                            printf("\n data : %s \n",prenotazione[i].data_visita);
-                    }
-
                     for (i = 1; i < conta_date(lista_date); i++)
                     {
                         count_datap = 0;
-                        printf("Lista date %s\n",lista_date[i]);
                         for (j = 1; j <= atoi(numprenotazioni); j++)
                         {
-                        
-                            printf("Lista date %s , index :%d\n",prenotazione[j].data_visita,j);
                             if (strcmp(lista_date[i], prenotazione[j].data_visita) == 0)
                             {
                                 count_datap++;
-                              
                             }
                         }
                         if (count_datap < 3)
@@ -125,7 +117,6 @@ int main(int argc, char *argv[])
                             strcpy(data_diponibili[k], lista_date[i]);
                             k++;
                         }
-                          printf("\n count:%d\n",count_datap);
                     }
 
                     printf("Data disponibili:\n");
@@ -159,7 +150,7 @@ int main(int argc, char *argv[])
                     } while (strcmp(conferma, "si") != 0);
 
                     FullRead(conn_fd, cod_prenotazione, sizeof(cod_prenotazione));
-                    printf("Il codice prenotazione e' R1%s\n", cod_prenotazione);
+                    printf("Il codice prenotazione e' R2%s\n", cod_prenotazione);
 
                     FullRead(conn_fd, prenotazione, sizeof(prenotazione));
                     printf("Dati prenotazione: \n ");
@@ -178,7 +169,7 @@ int main(int argc, char *argv[])
                     printf("\navvio procedura di recupero informazione visita prenotata\n");
 
                     //apertura del file del reparto
-                    file = fopen("reparto1.txt", "r+");
+                    file = fopen("reparto2.txt", "r+");
                     //letturera numero prenotazioni esistenti
                     fscanf(file, "%s", numprenotazioni);
 
@@ -227,7 +218,7 @@ int main(int argc, char *argv[])
                     printf("\navvio procedura di recupero informazione visita prenotata\n");
 
                     //apertura del file del reparto
-                    file = fopen("reparto1.txt", "r+");
+                    file = fopen("reparto2.txt", "r+");
                     //letturera numero prenotazioni esistenti
                     fscanf(file, "%s", numprenotazioni);
 
@@ -238,7 +229,7 @@ int main(int argc, char *argv[])
                     }
 
                     fclose(file);
-                    unlink("reparto1.txt");
+                    unlink("reparto2.txt");
 
                     //lettura codice prenotazione
                     bzero(cod_prenotazione, 5);
@@ -264,7 +255,7 @@ int main(int argc, char *argv[])
                             }
                         }
 
-                        file1 = fopen("reparto1.txt", "w+");
+                        file1 = fopen("reparto2.txt", "w+");
 
                         //mi posiziono all'inizio del file
                         fseek(file1, 0, SEEK_SET);
@@ -279,7 +270,7 @@ int main(int argc, char *argv[])
                             fprintf(file1, "%s\n", prenotazione[i].cognome);
                             fprintf(file1, "%s\n", prenotazione[i].data_visita);
                             fprintf(file1, "%s\n", prenotazione[i].cod_ricetta);
-                            fprintf(file1, "%s\n", prenotazione[i].nome_visita_scelta);
+                            fprintf(file1, "%s\n\n", prenotazione[i].nome_visita_scelta);
                         }
                         fclose(file1);
                     }
@@ -318,14 +309,14 @@ int main(int argc, char *argv[])
             {
                 close(list_fd_medico);
                 //apertura del file del reparto
-                file = fopen("reparto1.txt", "r+");
+                file = fopen("reparto2.txt", "r+");
                 //letturera numero prenotazioni esistenti
                 fscanf(file, "%s", numprenotazioni);
 
                 //lettura dai prenotazione esistenti
                 for (i = 1; i <= atoi(numprenotazioni); i++)
                 {
-                        fscanf(file, "%s %s %s %s %s\n", prenotazione[i].nome, prenotazione[i].cognome, prenotazione[i].data_visita, prenotazione[i].cod_ricetta, prenotazione[i].nome_visita_scelta);
+                    fscanf(file, "%s %s %s %s %s\n", prenotazione[i].nome, prenotazione[i].cognome, prenotazione[i].data_visita, prenotazione[i].cod_ricetta, prenotazione[i].nome_visita_scelta);
                 }
                 fclose(file);
                 //invio del numero delle prenotazioni

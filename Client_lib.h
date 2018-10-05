@@ -9,8 +9,8 @@
 
 #define localhost "127.0.0.1"
 #define client_cup_port 1024
-#define medico1_reparto1_port 1026
-
+#define medico1_reparto1_port 1030
+#define medico2_reparto2_port 1031
 
 // struttura dati memorizzare le possibili visite 
 typedef struct lista_tipologia_visite{
@@ -23,7 +23,8 @@ typedef struct prenotazione{
     char    cod_ricetta[15];
     char    nome[15];
     char    cognome[15];
-    char    data_visita[15];
+    char    data_visita[11];
+    char    nome_visita_scelta[30];
 }PRENOTAZIONE;
 
 //funzione per contare il numero totale delle tipologie delle visite disponibili

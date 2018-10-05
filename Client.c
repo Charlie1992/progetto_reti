@@ -3,7 +3,7 @@
 int main(int argc, char *argv[]){
     int socket, i=0;
     struct sockaddr_in servaddr;
-    char scelta[2], reparto[2], kbuffer[2], data_scelta[15], conferma[4], nome[15], cognome[15], cod_ricetta[15], cod_prenotazione[5], data_diponibili[100][20], charflag[2];
+    char scelta[2], visita[2], kbuffer[4], data_scelta[11], conferma[4], nome[15], cognome[15], cod_ricetta[15], cod_prenotazione[5], data_diponibili[200][11], charflag[2];
     LISTA_TIPOLOGIA_VISITE lista_tipologia_visite[100];
     PRENOTAZIONE recuperoDati[100];
     
@@ -32,9 +32,9 @@ int main(int argc, char *argv[]){
     CONNECTION(socket, servaddr, sizeof(servaddr));
     
     bzero(scelta, 2);
-    bzero(reparto, 2);
-    bzero(kbuffer, 2);
-    bzero(data_scelta, 15);
+    bzero(visita, 2);
+    bzero(kbuffer, 4);
+    bzero(data_scelta, 11);
     bzero(nome, 15);
     bzero(cognome, 15);
     bzero(cod_ricetta, 15);
@@ -44,7 +44,13 @@ int main(int argc, char *argv[]){
     printf("2.Informazione visita prenotata\n");
     printf("3.Cancella visita\n");
     printf("4.Esci\n");
-    scanf("%s", scelta);
+    do
+    {
+        printf("Inserisci scelta :");
+        scanf("%s", scelta);
+    }
+    while(atoi(scelta)>4 || atoi(scelta)<1);
+    
     
     //inzio prpcedure di prenotazione
     if (strcmp(scelta, "1") == 0){
@@ -59,13 +65,13 @@ int main(int argc, char *argv[]){
             printf("Id:%d Nome: %s \n", lista_tipologia_visite[i].id_tv, lista_tipologia_visite[i].nome_tv);
         }
         
-        printf("Segli reparto ");
-        scanf("%s", reparto);
+        printf("Segli visita ");
+        scanf("%s", visita);
         //se il reparto e compreso tra 1 e il numero tot delle possibili visite
-        if (atoi(reparto) >= 1 && atoi(reparto) <= conta_ltv(lista_tipologia_visite)){
+        if (atoi(visita) >= 1 && atoi(visita) <= conta_ltv(lista_tipologia_visite)){
             //invio scelta al server cup
-            printf("Reparto %s\n", reparto);
-            FullWrite(socket, reparto, sizeof(reparto));
+            printf("visita %s\n", visita);
+            FullWrite(socket, visita, sizeof(visita));
             
             //leggo date e dim di date disponibili
             FullRead(socket, kbuffer, sizeof(kbuffer));
@@ -107,7 +113,7 @@ int main(int argc, char *argv[]){
             
             // se non e compreso
         }else{
-            printf("Errore reparto inesistente.\n");
+            printf("Errore visita inesistente.\n");
             exit(-1);
         }
     }else if (strcmp(scelta, "2") == 0){
@@ -130,7 +136,8 @@ int main(int argc, char *argv[]){
             printf("\nricetta :%s",recuperoDati[1].cod_ricetta);
             printf("\nnome :%s",recuperoDati[1].nome);
             printf("\ncognome :%s",recuperoDati[1].cognome);
-            printf("\ndata :%s\n",recuperoDati[1].data_visita);
+            printf("\ndata :%s",recuperoDati[1].data_visita);
+            printf("\nvisita :%s\n",recuperoDati[1].nome_visita_scelta);
         }else{
             printf("NOn ci sta la prenotazone \n");
             exit(-1);
@@ -154,6 +161,7 @@ int main(int argc, char *argv[]){
         }
     }
     else{
+        printf("\nArrivederci!\n");
         exit(0);
     }
     
