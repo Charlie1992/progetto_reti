@@ -7,12 +7,15 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 
-#define localhost "127.0.0.1"
+// dichiarazione e inizializzazione del indirizzo localhost
+#define localhost "127.0.0.1" 
+
+// dichiarazione e inizializzazione delle porte per la comunicazione 
 #define client_cup_port 1024
 #define medico1_reparto1_port 1030
 #define medico2_reparto2_port 1031
 
-// struttura dati memorizzare le possibili visite 
+// struttura  per  memorizzare le tipologie delle visite 
 typedef struct lista_tipologia_visite{
     int id_tv;
     char nome_tv[50];
@@ -27,15 +30,15 @@ typedef struct prenotazione{
     char    nome_visita_scelta[30];
 }PRENOTAZIONE;
 
-//funzione per contare il numero totale delle tipologie delle visite disponibili
+// funzione per contare il numero totale delle tipologie delle visite disponibili
 int conta_ltv(LISTA_TIPOLOGIA_VISITE lista_tipologia_visite[]){
     int count = 1;
+    // resto nel while fintanto che non incontro il carattere -1, ossia la fine
     while(lista_tipologia_visite[count].id_tv!=-1){
         count++;
     }
     return count;
 }
-
 
 //------------ FUNZIONI WRAPPER-------------------
 
@@ -45,14 +48,13 @@ int SOCKET(int family,int type,int protocol){
         perror("socket");
         exit(-1);
     }
-    return socket(family,type,protocol<0);
+    return socket(family,type,protocol);
 }
 
-
-// converte la stringa passata come secondo argomento 
-// in un indirizzo di rete scritto in network order e
-// lo memorizza nella locazione di memoria puntata dal 
-// terzo argomento
+// la funzione INET_PITON converte la stringa passata 
+// come secondo argomento in un indirizzo di rete 
+// scritto in network order e lo memorizza nella 
+// locazione di memoria puntata dal terzo argomento
 void INET_PTON(int family,char *ip,struct sockaddr_in *servaddr){
     if(inet_pton(family,ip,&servaddr->sin_addr)<0){
         perror("inet_pton");
@@ -60,7 +62,8 @@ void INET_PTON(int family,char *ip,struct sockaddr_in *servaddr){
     }
 }
 
-// Connette il socket sockfd all'indirizzo serv_addr
+// la funzione CONNECTION ha lo scopo di connette il 
+// socket all'indirizzo serv_addr
 void CONNECTION(int socket,struct sockaddr_in servaddr,int size){
     if(connect(socket,(struct sockaddr *) &servaddr,size)<0){
         perror("connection");
@@ -68,6 +71,7 @@ void CONNECTION(int socket,struct sockaddr_in servaddr,int size){
     }
 }
 
+// la funzione FullWrite serve per scrivere sulla socket
 ssize_t FullWrite(int fd, const void *buf, size_t count)
 {
     size_t nleft;
@@ -88,6 +92,7 @@ ssize_t FullWrite(int fd, const void *buf, size_t count)
     return (nleft);
 }
 
+// la funzione FullRead serve per leggere dalla socket
 ssize_t FullRead(int fd, void *buf, size_t count)
 {
     size_t nleft;
@@ -102,7 +107,7 @@ ssize_t FullRead(int fd, void *buf, size_t count)
                 exit(nread); /*altrimenti esci con un errore*/
             }
         }else if(nread==0){
-            break;    /*interrompi il ciclo poichè il socket è vuoto ed è                         stato chiuso */
+            break;    /*interrompi il ciclo poichè il socket è vuoto ed è stato chiuso */
         }
         nleft-=nread; /*deincrementa la variabile */
         buf +=nread; /*incrementa il buffer*/
