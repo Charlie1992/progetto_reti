@@ -6,9 +6,8 @@ int main(int argc, char *argv[]){
     int list_fd, conn_fd, // comunicazione con client
         list_fd_server1, // comunicazione con server1
         list_fd_server2, // comunnicazione con server2
-        logging = 1, len, enable = 1, i = 0, flag = 0;
-    
-    struct sockaddr_in servaddr, serv1addr,serv2addr, client; // strutture relative al server, server1, server2, client
+         len, enable = 1, i = 0, flag = 0;
+        struct sockaddr_in servaddr, serv1addr,serv2addr, client; // strutture relative al server, server1, server2, client
 
     pid_t pid;
 
@@ -19,12 +18,12 @@ int main(int argc, char *argv[]){
          numprenotazioni[2], cod_prenotazione[5], cod_prenotazioneReparto[5], 
          charflag[2], cod_reparto[3], cod_pret[5], data_diponibili[200][11];
          LISTA_TIPOLOGIA_VISITE lista_tipologia_visite[100];
-    // dichiarazione di due struttare di tipo PRENOTAZIONE
+    // dichiarazione di due strutture di tipo PRENOTAZIONE
     PRENOTAZIONE prenotazione[100], recuperoDati[2];
     
     FILE *file;
 
-    // riempio la lista tipoligia visite
+    // riempio la lista tipologia visite
     ListaNomiVisite(lista_tipologia_visite);
    
     
@@ -40,30 +39,30 @@ int main(int argc, char *argv[]){
     // l'app accetterà connessioni da qualsiasi indirizzo
     // associato al server
     servaddr.sin_addr.s_addr = htons(INADDR_ANY);
-    // funione per memeorizzare la porta sulla quale il server ci risponde 
-    // questo valore sara salvato nel campo sin_port
+    // funzione per memorizzare la porta sulla quale il server ci risponde 
+    // questo valore sarà salvato nel campo sin_port
     servaddr.sin_port = htons(client_cup_port);
     // IMPOSTA SOCKETS IN MODO DA POTER RIUTILIZZARE L'INDIRIZZO IP
     setsockopt(list_fd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int));
     // assegna l'indirizzo alla socket
     BIND(list_fd, servaddr);
-    // Mette il socket in modalita' di ascolto in
+    // Mette il socket in modalità di ascolto in
     // attesa di nuove connessioni
     LISTEN(list_fd, 1024);
     
-    while (1){
-        // dimensione delle struttura client
+ while (1){
+        // dimensione della struttura client
         len = sizeof(client);
         // permette di accettare le nuove connessioni
         // che saranno poi gestite dal processo figlio mediante la fork().
         conn_fd = ACCEPT(list_fd, (struct sockaddr *)&client,(socklen_t *) &len);
         
-        // fork per gestire le connesione
+        // fork per gestire le connessioni
         if ((pid = fork()) < 0){
             perror("fork error");
             exit(-1);
         }
-        // se sono il filgio
+        // se sono il figlio
         if (pid == 0){
             // chiude list_fd, e interagisce con il client
             // tramite la connessione con conn_sd
@@ -92,14 +91,14 @@ int main(int argc, char *argv[]){
                 FullRead(conn_fd, reparto, sizeof(reparto));
                 printf("Reparto scelto %d \n", atoi(reparto));
                 
-                if (atoi(reparto) >=  1  && atoi(reparto) <=  4){ // se la scalta è compresa tra 1 e 4 comunico con il server reparto 1
+                if (atoi(reparto) >=  1  && atoi(reparto) <=  4){ // se la scelta è compresa tra 1 e 4 comunico con il server reparto 1
                      
                     //*******************il server cup ora si comporta come client e comunica con il server reparto 1********************
                     list_fd_server1 = ClientLink(serv1addr,cup_server_reparto1_port,argv[1],argc);
                     // invio la scelta al server reparto 1 
                     FullWrite(list_fd_server1, scelta, sizeof(scelta));
                     
-                    // ricevo dimenzione e date delle date disponibili dal server reparto 1
+                    // ricevo dimensione e date delle date disponibili dal server reparto 1
                     FullRead(list_fd_server1, kbuffer, sizeof(kbuffer));
                     FullRead(list_fd_server1, data_diponibili, sizeof(data_diponibili));
                     printf("Date disponibili:\n");
@@ -107,11 +106,10 @@ int main(int argc, char *argv[]){
                         printf("%s \n", data_diponibili[i]);
                     }
                     
-                    // invio dimenzione e date disponibili al client
+                    // invio dimensione e date disponibili al client
                     FullWrite(conn_fd, kbuffer, sizeof(kbuffer));
                     FullWrite(conn_fd, data_diponibili, sizeof(data_diponibili));
-
-                    do{
+                  do{
                         // ricevo data dal client
                         FullRead(conn_fd, data_scelta, sizeof(data_scelta));
                         printf("Data scelta %s \n", data_scelta);
@@ -174,15 +172,14 @@ int main(int argc, char *argv[]){
                     // invio codice prenotazione e i dati al server reparto 1
                     FullWrite(list_fd_server1, cod_prenotazione, sizeof(cod_prenotazione));
                     FullWrite(list_fd_server1, prenotazione, sizeof(prenotazione));
-
-                }else if (atoi(reparto) >  4){ // altrimenti comunico con il server reparto 2     
+ }else if (atoi(reparto) >  4){ // altrimenti comunico con il server reparto 2     
                     
                     //*******************il server cup ora si comporta come client e comunica con il server reparto 2********************
                     list_fd_server2 = ClientLink(serv2addr,cup_server_reparto2_port,argv[1],argc);
                     // invio la scelta al server reparto 2
                     FullWrite(list_fd_server2, scelta, sizeof(scelta));
                     
-                    // ricevo date e dimenzione delle date disponibili
+                    // ricevo date e dimensione delle date disponibili
                     FullRead(list_fd_server2, kbuffer, sizeof(kbuffer));
                     printf("Valore di k %s \n", kbuffer);
                     FullRead(list_fd_server2, data_diponibili, sizeof(data_diponibili));
@@ -191,7 +188,7 @@ int main(int argc, char *argv[]){
                         printf("%s \n", data_diponibili[i]);
                     }
                     
-                    // invio date e dimenzione disponibili al client
+                    // invio date e dimensioni disponibili al client
                     FullWrite(conn_fd, kbuffer, sizeof(kbuffer));
                     FullWrite(conn_fd, data_diponibili, sizeof(data_diponibili));
                     do{
@@ -257,7 +254,7 @@ int main(int argc, char *argv[]){
                     FullWrite(list_fd_server2, cod_prenotazione, sizeof(cod_prenotazione));
                     FullWrite(list_fd_server2, prenotazione, sizeof(prenotazione));
                 }
-            }else if (strcmp(scelta, "2") == 0){// inizio recupero infarmazioni visita
+           }else if (strcmp(scelta, "2") == 0){// inizio recupero informazioni visita
                 printf("\n Avvio procedura di recupero informazioni della visita prenotata\n");
                 // pulizia dei buffer
                 bzero(cod_prenotazione, 5);
@@ -267,15 +264,15 @@ int main(int argc, char *argv[]){
                     // lettura codice prenotazione dal client
                     FullRead(conn_fd, cod_prenotazione, sizeof(cod_prenotazione));
                     printf("\ncodice prenotazione :%s", cod_prenotazione);
-                    // controllo se esite il reparto
+                    // controllo se esiste il reparto
                     flag = controllo(cod_prenotazione);
                     // converto in char il flag
                     sprintf(charflag, "%d", flag);
-                    // invio il falg a client
+                    // invio il flag a client
                     FullWrite(conn_fd, charflag, sizeof(charflag));
                 } while (flag != 1);// resto nel while fintanto che il flag è diverso da 1
                 
-                // separo il codice reparto dal codice  prenotazione
+                // separo il codice reparto dal codice prenotazione
                 for (i = 0; i < strlen(cod_prenotazione); i++){
                     if (i < 2){
                         cod_reparto[i] = cod_prenotazione[i];
@@ -290,7 +287,7 @@ int main(int argc, char *argv[]){
                 if (strcmp(cod_reparto, "R1") == 0){ // se codice reparto è uguale a R1
                     //*******************il server cup ora si comporta come client e comunica con il server reparto 1********************
                     list_fd_server1 = ClientLink(serv1addr,cup_server_reparto1_port,argv[1],argc);
-                    // invio la scalta e il codice prenotazione al server reparto 1
+                    // invio la scelta e il codice prenotazione al server reparto 1
                     FullWrite(list_fd_server1, scelta, sizeof(scelta));
                     FullWrite(list_fd_server1, cod_pret, sizeof(cod_pret));
                     
@@ -303,11 +300,24 @@ int main(int argc, char *argv[]){
                     FullWrite(conn_fd, conferma, sizeof(conferma));
                     // lettura dei dati inviati dal server reaprto 1
                     FullRead(list_fd_server1, recuperoDati, sizeof(recuperoDati));
+                    
+                    if(strcmp(conferma,"si")==0){
+                        // stampa dati utente
+                        printf("Codice ricetta %s\n", recuperoDati[1].cod_ricetta);
+                        printf("Nome %s\n", recuperoDati[1].nome);
+                        printf("Cognome %s\n", recuperoDati[1].cognome);
+                        printf("data %s\n", recuperoDati[1].data_visita);
+                        printf("visita %s\n", recuperoDati[1].nome_visita_scelta);
+                        printf("Invio dati recuperati al client\n");
+                    }
+
+                    // invio dati recuperati al client
+                    FullWrite(conn_fd, recuperoDati, sizeof(recuperoDati));
 
                 }else if(strcmp(cod_reparto, "R2") == 0){ // se codice reparto è uguale a R2
                     //*******************il server cup ora si comporta come client e comunica con il server reparto 2********************
                      list_fd_server2 = ClientLink(serv2addr,cup_server_reparto2_port,argv[1],argc);
-                    // invio la scalta e il codice prenotazione al server reparto 2
+                    // invio la scelta e il codice prenotazione al server reparto 2
                     FullWrite(list_fd_server2, scelta, sizeof(scelta));
                     FullWrite(list_fd_server2, cod_pret, sizeof(cod_pret));
                     // pulizia del buffer
@@ -317,27 +327,31 @@ int main(int argc, char *argv[]){
                     printf("\nconferma:%s", conferma);
                     // invio la conferma al client
                     FullWrite(conn_fd, conferma, sizeof(conferma));
-                    // lettura dei dati inviati dal server reaprto 2
+                    // lettura dei dati inviati dal server reparto 2
                     FullRead(list_fd_server2, recuperoDati, sizeof(recuperoDati));
+                     
+                    if(strcmp(conferma,"si")==0){
+                        // stampa dati utente
+                        printf("Codice ricetta %s\n", recuperoDati[1].cod_ricetta);
+                        printf("Nome %s\n", recuperoDati[1].nome);
+                        printf("Cognome %s\n", recuperoDati[1].cognome);
+                        printf("data %s\n", recuperoDati[1].data_visita);
+                        printf("visita %s\n", recuperoDati[1].nome_visita_scelta);
+                        printf("Invio dati recuperati al client\n");
+                    }
+
+                    // invio dati recuperati al client
+                    FullWrite(conn_fd, recuperoDati, sizeof(recuperoDati));
+
                 }else{ // se il reparto non esiste
                     strcpy(conferma, "no");
                     // invio la conferma al client
                     FullWrite(conn_fd, conferma, sizeof(conferma));
                 }
-
-                // stampa dati utente
-                printf("Codice ricetta %s\n", recuperoDati[1].cod_ricetta);
-                printf("Nome %s\n", recuperoDati[1].nome);
-                printf("Cognome %s\n", recuperoDati[1].cognome);
-                printf("data %s\n", recuperoDati[1].data_visita);
-                printf("visita %s\n", recuperoDati[1].nome_visita_scelta);
-                printf("Invio dati recuperati al client\n");
+               
                 
-                // invio dati recuparti al client
-                FullWrite(conn_fd, recuperoDati, sizeof(recuperoDati));
             }else if (strcmp(scelta, "3") == 0){ // inizio cancellazione visita
-                
-                printf("\n Avvio procedura di cancellazione visita\n");
+                         printf("\n Avvio procedura di cancellazione visita\n");
                 // pulizia dei buffer
                 bzero(cod_prenotazione, 5);
                 bzero(cod_pret, 5);
@@ -346,14 +360,14 @@ int main(int argc, char *argv[]){
                     // lettura codice prenotazione dal client
                     FullRead(conn_fd, cod_prenotazione, sizeof(cod_prenotazione));
                     printf("\ncodice prenotazione :%s", cod_prenotazione);
-                    // controllo se esite il reparto
+                    // controllo se esiste il reparto
                     flag = controllo(cod_prenotazione);
                     // converto in char il flag
                     sprintf(charflag, "%d", flag);
                     // invio il falg a client
                     FullWrite(conn_fd, charflag, sizeof(charflag));
                 } while (flag != 1); // resto nel while fintanto che il flag è diverso da 1
-                // separo il codice reparto dal codice  prenotazione
+                // separo il codice reparto dal codice prenotazione
                 for (i = 0; i < strlen(cod_prenotazione); i++){
                     if (i < 2){
                         cod_reparto[i] = cod_prenotazione[i];
@@ -367,7 +381,7 @@ int main(int argc, char *argv[]){
                 if (strcmp(cod_reparto, "R1") == 0){  // se il codice reparto è uguale a R1
                     //*******************il server cup ora si comporta come client e comunica con il server reparto 1********************
                     list_fd_server1 = ClientLink(serv1addr,cup_server_reparto1_port,argv[1],argc);
-                    // invio la scalta e il codice prenotazione al server reparto 1
+                    // invio la scelta e il codice prenotazione al server reparto 1
                     FullWrite(list_fd_server1, scelta, sizeof(scelta));
                     FullWrite(list_fd_server1, cod_pret, sizeof(cod_pret));
                     // lettura conferma prenotazione dal server reparto 1
@@ -378,7 +392,7 @@ int main(int argc, char *argv[]){
                 }else if(strcmp(cod_reparto, "R2") == 0){  // se codice reparto è uguale a R2
                      //*******************il server cup ora si comporta come client e comunica con il server reparto 2********************
                     list_fd_server2 = ClientLink(serv2addr,cup_server_reparto2_port,argv[1],argc);
-                    // invio la scalta e il codice prenotazione al server reparto 2
+                    // invio la scelta e il codice prenotazione al server reparto 2
                     FullWrite(list_fd_server2, scelta, sizeof(scelta));
                     FullWrite(list_fd_server2, cod_pret, sizeof(cod_pret));
                     // lettura conferma prenotazione dal server reparto 2
@@ -394,7 +408,7 @@ int main(int argc, char *argv[]){
             }else{
                 printf("\nErrore \n");
             }
-            // chiusura delle comunicazione
+            // chiusura delle comunicazioni
             close(list_fd_server1);
             close(list_fd_server2);
             close(conn_fd);

@@ -9,7 +9,7 @@ int main(int argc, char *argv[]){
     char lista_date[100][11],// matrice di char per contenere le date
          numprenotazioni[2],numTotDate[4];// dichiarazione di buffer per inviare e ricevere dati
     
-    // dichiarazione di una struttare di tipo PRENOTAZIONE
+    // dichiarazione di una struttura di tipo PRENOTAZIONE
     PRENOTAZIONE prenotazione[100];
     
     //*************comunicazione con il server reparto ****************************

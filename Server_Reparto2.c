@@ -15,10 +15,10 @@ int main(int argc, char *argv[])
          cod_prenotazione[5], data_diponibili[200][11], 
          lista_date[200][11], data_scelta[11],numTotDate[4];
 
-    // dichiarazione di due struttare di tipo PRENOTAZIONE
+    // dichiarazione di due strutture di tipo PRENOTAZIONE
     PRENOTAZIONE prenotazione[100], recuperoDati[2];
 
-    // riempio la lista tipoligia visite
+    // riempio la lista tipologia visite
     riempi_lista_data(lista_date);
 
     //*************comunicazione con il server centrale******************
@@ -33,19 +33,19 @@ int main(int argc, char *argv[])
     // l'app accetterà connessioni da qualsiasi indirizzo
     // associato al server
     servaddr.sin_addr.s_addr = htons(INADDR_ANY);
-    // funione per memeorizzare la porta sulla quale il serve ci risponde. 
-    // questo valore sara salvato nel campo sin_port
+    // funzione per memorizzare la porta sulla quale il server ci risponde. 
+    // questo valore sarà salvato nel campo sin_port
     servaddr.sin_port = htons(cup_server_reparto2_port);
 
     //IMPOSTA SOCKETS IN MODO DA POTER RIUTILIZZARE L'INDIRIZZO IP
     setsockopt(list_fd, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int));
     // assegna l'indirizzo alla socket
     BIND(list_fd,servaddr);
-    // mette il socket in modalita' di ascolto in
+    // mette il socket in modalità di ascolto in
     // attesa di nuove connessioni
     LISTEN(list_fd,1024);
 
-     //*************comunicazione con il server centrale******************
+     //*************comunicazione con il Client medico******************
     // Creazione di una socket passando come parametro:
     // AF_INET =   famiglia di ip che stiamo considerando (IP4v)
     // SOCK_STREAM = canale bidirezionale, dove i dati vengono ricevuti e trasmessi come un flusso continuo
@@ -56,21 +56,21 @@ int main(int argc, char *argv[])
     // viene utilizzato come indirizzo del server
     // l'app accetterà connessioni da qualsiasi indirizzo associato al server
     servaddr_medico.sin_addr.s_addr = htonl(INADDR_ANY);
-    // funione per memeorizzare la porta sulla quale il serve ci risponde. 
-    // questo valore sara salvato nel campo sin_port
+    // funzione per memorizzare la porta sulla quale il server ci risponde. 
+    // questo valore sarà salvato nel campo sin_port
     servaddr_medico.sin_port = htons(medico2_reparto2_port);
 
     // IMPOSTA SOCKETS IN MODO DA POTER RIUTILIZZARE L'INDIRIZZO IP
     setsockopt(list_fd_medico, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int));
     // assegna l'indirizzo alla socket
     BIND(list_fd_medico, servaddr_medico);
-    // mette il socket in modalita' di ascolto in
+    // mette il socket in modalità di ascolto in
     // attesa di nuove connessioni
     LISTEN(list_fd_medico, 1024);
 
 
-    pid = fork();  // genero un filgio per gestire la comunicazione con il server CUP
-    pid1 = fork(); // genero un filgio per gestire la comunicazione con client medico
+    pid = fork();  // genero un figlio per gestire la comunicazione con il server CUP
+    pid1 = fork(); // genero un figlio per gestire la comunicazione con client medico
 
     if (pid == 0)// se sono il figlio
     {
@@ -84,13 +84,13 @@ int main(int argc, char *argv[])
             // che saranno poi gestite dal processo figlio mediante la fork().
             conn_fd = ACCEPT(list_fd,NULL,NULL);
             
-            // fork per gestire le connessione
+            // fork per gestire le connessioni
             if ((pid = fork()) < 0)
             {
                 perror("fork error");
                 exit(-1);
             }
-            // se sono il filgio
+            // se sono il figlio
             if (pid == 0)
             {
                 // chiude list_fd, e interagisce con il client
@@ -103,12 +103,12 @@ int main(int argc, char *argv[])
                     k = 0;
                     printf("avvio procedura di prenotazione visita\n");
 
-                    // apertura del file  reparto  
+                    // apertura del file reparto  
                     file = fopen("reparto2.txt", "r+");
                     // letture numero prenotazioni esistenti
                     fscanf(file, "%s", numprenotazioni);
 
-                    // lettura dal file delle prenotazione esistenti
+                    // lettura dal file delle prenotazioni esistenti
                     for (i = 1; i <= atoi(numprenotazioni); i++)
                     {
                         fscanf(file, "%s %s %s %s %s\n", 
@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
                         count_datap = 0;
                         for (j = 1; j <= atoi(numprenotazioni); j++)
                         {
-                            // se la data della lista è presente nella date delle prenotazioni
+                            // se la data della lista è presente nelle date delle prenotazioni
                             if (strcmp(lista_date[i], prenotazione[j].data_visita) == 0)
                             {
                                 count_datap++;
@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
                     {
                         printf("%s \n", data_diponibili[i]);
                     }
-                    // invio date dipsponibili e dimenzione  al server cup
+                    // invio date disponibili e dimensione al server cup
                     sprintf(kbuffer, "%d", k);
                     FullWrite(conn_fd, kbuffer, sizeof(kbuffer));
                     FullWrite(conn_fd, data_diponibili, sizeof(data_diponibili));
@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
                     // leggo codice prenotazione dal serve cup
                     FullRead(conn_fd, cod_prenotazione, sizeof(cod_prenotazione));
                     printf("Il codice prenotazione e' R1%s\n", cod_prenotazione);
-                    // leggo dati delle prenotazione dal serve cup
+                    // leggo dati delle prenotazioni dal serve cup
                     FullRead(conn_fd, prenotazione, sizeof(prenotazione));
                     printf("Dati prenotazione: \n ");
                     printf("Nome: %s \n ", prenotazione[atoi(cod_prenotazione)].nome);
@@ -182,8 +182,7 @@ int main(int argc, char *argv[])
                     printf("Codice Ricetta: %s \n ", prenotazione[atoi(cod_prenotazione)].cod_ricetta);
                     printf("Data: %s \n ", prenotazione[atoi(cod_prenotazione)].data_visita);
                     printf("Nome Visita: %s \n ", prenotazione[atoi(cod_prenotazione)].nome_visita_scelta);
-
-                }else if (strcmp(scelta, "2") == 0){ // inizio recupero infarmazioni visita
+              }else if (strcmp(scelta, "2") == 0){ // inizio recupero informazioni visita
                     // pulizia buffer
                     bzero(conferma, 4);
 
@@ -248,7 +247,7 @@ int main(int argc, char *argv[])
                     // lettura numero prenotazioni esistenti
                     fscanf(file, "%s", numprenotazioni);
 
-                    // lettura da file delle prenotazione esistenti
+                    // lettura da file delle prenotazioni esistenti
                     for (i = 1; i <= atoi(numprenotazioni); i++)
                     {
                         fscanf(file, "%s %s %s %s %s\n", 
@@ -299,8 +298,7 @@ int main(int argc, char *argv[])
                         fseek(file1, 0, SEEK_SET);
                         // salvo il numero di prenotazioni esistenti
                         fprintf(file1, "%s\n\n", numprenotazioni);
-
-                        // salvataggio delle prenotazioni
+                     // salvataggio delle prenotazioni
                         for (i = 1; i <= atoi(numprenotazioni); i++)
                         {
                             //salva su file
@@ -318,7 +316,7 @@ int main(int argc, char *argv[])
                     // invio la conferma al server cup 
                     FullWrite(conn_fd, conferma, sizeof(conferma));
                 }
-                // chiusura delle comunicazione
+                // chiusura delle comunicazioni
                 close(conn_fd);
                 exit(0);
            
@@ -333,35 +331,35 @@ int main(int argc, char *argv[])
         wait(NULL);
     }
 
-    if (pid1 == 0)// se sono il figlio
+       if (pid1 == 0)
     {
         while (1)
         {
-            // permette di accettare le nuove connessioni
+             // permette di accettare le nuove connessioni
             // che saranno poi gestite dal processo figlio mediante la fork().
             conn_fd_medico = ACCEPT(list_fd_medico, NULL, NULL);
 
-            // fork per gestire le connessione
+            // fork per gestire le connesione
             if ((pid1 = fork()) < 0)
             {
                 perror("fork error");
-            }
                 exit(-1);
-            // se sono il figlio
+            }
+            // se sono il filgio
             if (pid1 == 0)
             {
-                // chiude list_fd_medico, e interagisce con il client
+            	// chiude list_fd_medico, e interagisce con il client
                 // tramite la connessione con conn_sd_medico
                 close(list_fd_medico);
-                // apertura del file del reparto 
+                //apertura del file del reparto
                 file = fopen("reparto2.txt", "r+");
-                // lettura numero prenotazioni esistenti
+                //letturera numero prenotazioni esistenti
                 fscanf(file, "%s", numprenotazioni);
 
-                // lettura da file delle prenotazioni esistenti
+                //lettura dai prenotazione esistenti
                 for (i = 1; i <= atoi(numprenotazioni); i++)
-                {
-                        fscanf(file, "%s %s %s %s %s\n", 
+                { 
+                	fscanf(file, "%s %s %s %s %s\n", 
                         prenotazione[i].nome, 
                         prenotazione[i].cognome, 
                         prenotazione[i].data_visita, 
@@ -370,18 +368,16 @@ int main(int argc, char *argv[])
                 }
                 // chiusura del file
                 fclose(file);
-                // invio del numero delle prenotazioni al medico
+                //invio del numero delle prenotazioni
                 FullWrite(conn_fd_medico, numprenotazioni, sizeof(numprenotazioni));
-                // invio delle prenotazioni al medico
+                //invio delle prenotazioni
                 FullWrite(conn_fd_medico, prenotazione, sizeof(prenotazione));
-                // converto in char il numero totale di date 
                 sprintf(numTotDate, "%d", conta_date(lista_date));
-                // invio numero totali di date al medico
+                //Invio numero totali di date
                 FullWrite(conn_fd_medico, numTotDate, sizeof(numTotDate));
-                // invio della lista date totali al medico
+                //invio della lista date totali
                 FullWrite(conn_fd_medico, lista_date, sizeof(lista_date));
-                
-                // chiusura delle comunicazione
+                // chiusura delle comunicazioni
                 close(conn_fd_medico);
                 exit(1);
             }
@@ -391,10 +387,11 @@ int main(int argc, char *argv[])
             }
         }
     }
-    else // altrimenti
+    else// altrimenti
     {
         wait(NULL);
     }
+
 
     exit(0);
 }

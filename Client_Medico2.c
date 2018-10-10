@@ -2,14 +2,14 @@
 
 int main(int argc, char *argv[]){
     
-    struct sockaddr_in servaddr;// strutture relative al server 1
+    struct sockaddr_in servaddr;// strutture relative al server 2
     int socket, // comunicazione con server1
         i,j,count;
     
     char lista_date[100][11],// matrice di char per contenere le date
          numprenotazioni[2],numTotDate[4];// dichiarazione di buffer per inviare e ricevere dati
     
-    // dichiarazione di una struttare di tipo PRENOTAZIONE
+    // dichiarazione di una struttura di tipo PRENOTAZIONE
     PRENOTAZIONE prenotazione[100];
     
     //*************comunicazione con il server reparto ****************************

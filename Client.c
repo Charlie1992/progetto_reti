@@ -12,9 +12,9 @@ int main(int argc, char *argv[]){
             conferma[4], nome[15], cognome[15], cod_ricetta[15], 
             cod_prenotazione[5], data_diponibili[200][11], charflag[2];
 
-    //dichiarazione di una struttara di tipo LISTA_TIPOLOGIA_VISITE
+    //dichiarazione di una struttura di tipo LISTA_TIPOLOGIA_VISITE
     LISTA_TIPOLOGIA_VISITE lista_tipologia_visite[100];
-    //dichiarazione di una struttara di tipo PRENOTAZIONE
+    //dichiarazione di una struttura di tipo PRENOTAZIONE
     PRENOTAZIONE recuperoDati[100];
     
     //*************comunicazione con il server reparto ****************************
@@ -57,12 +57,12 @@ int main(int argc, char *argv[]){
     do{
         printf("Inserisci scelta :");
         scanf("%s", scelta);
-    }while(atoi(scelta)>4 || atoi(scelta)<1); //resto nel while fintanto che scelta non è compresa tra 1 e 4 
-    // inzio propcedura di prenotazione
+    }while(atoi(scelta)>4 || atoi(scelta)<1); //resto nel while fintanto che la scelta non è compresa tra 1 e 4 
+    // inizio procedura di prenotazione
     if (strcmp(scelta, "1") == 0){
         printf("inzio propcedura di prenotazione\n");
         printf("Scelta : %s\n", scelta);
-        // invio scelta la server CUP
+        // invio scelta al server CUP
         FullWrite(socket, scelta, sizeof(scelta));
         // letture delle possibili visite 
         FullRead(socket, lista_tipologia_visite, sizeof(lista_tipologia_visite));
@@ -115,7 +115,7 @@ int main(int argc, char *argv[]){
             printf("Errore visita inesistente.\n");
             exit(-1);
         }
-    }else if (strcmp(scelta, "2") == 0){// inizio recupero infarmazioni visita
+    }else if (strcmp(scelta, "2") == 0){// inizio recupero informazioni visita
         printf("\nAvvio procedura di recupero informazioni della visita prenotata\n");
         // invio scelta al server CUP
         FullWrite(socket, scelta, sizeof(scelta));
